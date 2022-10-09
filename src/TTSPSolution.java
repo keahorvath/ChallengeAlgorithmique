@@ -6,4 +6,11 @@ public class TTSPSolution {
         this.interventionsSchedule = interventionsSchedule;
         this.teamsSchedule = teamsSchedule;
     }
+
+    public void print(){
+        System.out.println("///////////// Solution ////////////");
+        interventionsSchedule.print();
+        teamsSchedule.print();
+
+    }
 }

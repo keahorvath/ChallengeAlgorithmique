@@ -1,7 +1,16 @@
 public class TeamsSchedule {
-    Team[] teams;
+    TeamsDay[] days;
 
-    public TeamsSchedule(Team[] teams){
-        this.teams = teams;
+    public TeamsSchedule(TeamsDay[] days){
+        this.days = days;
+    }
+
+    public void print(){
+        System.out.println("----------------------------------");
+        System.out.println("------- TECHNICIAN TEAMS ---------");
+        System.out.println("----------------------------------");
+        for (TeamsDay d : days){
+            d.print();
+        }
     }
 }

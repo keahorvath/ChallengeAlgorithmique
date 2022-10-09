@@ -1,26 +1,23 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InstanceReader {
-
-    public static void main(String[] args) throws IOException {
-        File instanceFile = new File(args[0] + "/instance");
-        File intervListFile = new File(args[0] + "/interv_list");
-        File techListFile = new File(args[0] + "/tech_list");
-
-        //Creation of instance
-        Scanner instanceReader = new Scanner(instanceFile);
+    public static Instance readInstance(File file) throws FileNotFoundException {
+        Scanner instanceReader = new Scanner(file);
         instanceReader.nextLine();
         String str = instanceReader.nextLine();
         String[] data1 = str.split(" ", 0);
-        Instance instance = new Instance(data1[0], Integer.parseInt(data1[1]), Integer.parseInt(data1[2]), Integer.parseInt(data1[3]), Integer.parseInt(data1[4]), Integer.parseInt(data1[5]));
+        return new Instance(data1[0], Integer.parseInt(data1[1]), Integer.parseInt(data1[2]), Integer.parseInt(data1[3]), Integer.parseInt(data1[4]), Integer.parseInt(data1[5]));
+    }
 
-        //Creation of interventions
-        Scanner intervReader = new Scanner(intervListFile);
+    public static Intervention[] readInterventions(File file, Instance instance) throws FileNotFoundException {
+        Scanner intervReader = new Scanner(file);
         intervReader.nextLine();
         Intervention[] interventions = new Intervention[instance.nbInterventions];
+        String str;
         for (int i = 0; i < instance.nbInterventions; i++){
             str = intervReader.nextLine();
             String[] data2 = str.split(" ", 0);
@@ -46,11 +43,14 @@ public class InstanceReader {
             interventions[i] = new Intervention(number);
             interventions[i].fillInfo(time, preds2, prio, cost, domainsLevels);
         }
+        return interventions;
+    }
 
-        //Creation of technicians
-        Scanner techsReader = new Scanner(techListFile);
+    public static Technician[] readTechnicians(File file, Instance instance) throws FileNotFoundException {
+        Scanner techsReader = new Scanner(file);
         techsReader.nextLine();
         Technician[] technicians = new Technician[instance.nbTechs];
+        String str;
         for (int i = 0; i < instance.nbTechs; i++) {
             str = techsReader.nextLine();
             String[] data3 = str.split(" ", 0);
@@ -68,8 +68,20 @@ public class InstanceReader {
             for (int a = 0; a < unavail1.size(); a++) {
                 unavail2[a] = unavail1.get(a);
             }
-            technicians[i] = new Technician(name, domainsLevels, unavail2);
+            technicians[i] = new Technician(name);
+            technicians[i].fillInfo(domainsLevels, unavail2);
         }
+        return technicians;
+    }
+
+    public static void main(String[] args) throws IOException {
+        File instanceFile = new File(args[0] + "/instance");
+        File intervListFile = new File(args[0] + "/interv_list");
+        File techListFile = new File(args[0] + "/tech_list");
+
+        Instance instance = readInstance(instanceFile);
+        Intervention[] interventions = readInterventions(intervListFile, instance);
+        Technician[] technicians = readTechnicians(techListFile, instance);
 
         //Creation of TTSPData
         TTSPData ttspData = new TTSPData(instance, interventions, technicians);
