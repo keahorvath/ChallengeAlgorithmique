@@ -1,3 +1,5 @@
+package code;
+
 public class TTSPData {
     Instance instance;
     Intervention[] interventions;
@@ -24,5 +26,6 @@ public class TTSPData {
         for (Technician t : this.technicians){
             t.print();
         }
+        System.out.println();
     }
 }

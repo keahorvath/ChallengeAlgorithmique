@@ -1,3 +1,5 @@
+package code;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -5,6 +7,7 @@ import java.util.Scanner;
 
 public class SolutionReader {
 
+    //This readInterventionsSchedule method reads an interv_dates file without knowing the interventions' data
     public static InterventionsSchedule readInterventionsSchedule(File file) throws FileNotFoundException {
         Scanner intervDatesReader = new Scanner(file);
         ArrayList<Intervention> intervs = new ArrayList<>();
@@ -21,6 +24,17 @@ public class SolutionReader {
         }
         return new InterventionsSchedule(interventions);
     }
+    public static InterventionsSchedule readInterventionsSchedule(File file, TTSPData ttspData) throws FileNotFoundException {
+        Scanner intervDatesReader = new Scanner(file);
+        int currentIntervention = 0;
+        while (intervDatesReader.hasNextLine()){
+            String str = intervDatesReader.nextLine();
+            String[] data = str.split(" ", 0);
+            ttspData.interventions[currentIntervention].fillResults(Integer.parseInt(data[3]), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
+            currentIntervention++;
+        }
+        return new InterventionsSchedule(ttspData.interventions);
+    }
 
     public static TeamsSchedule readTeamsSchedule(File file) throws Exception {
         Scanner teamsReader = new Scanner(file);
@@ -32,12 +46,12 @@ public class SolutionReader {
             int currentTeam = -1;
             ArrayList<Team> teams = new ArrayList<>();
             for (int i = 1; i < data.length; i++) {
-                System.out.println(data[i]);
                 if (data[i].equals("[")){
                     currentTeam++;
                     continue;
                 }
                 ArrayList<Technician> technicians = new ArrayList<>();
+                System.out.println(data[i]);
                 while (!data[i].equals("]")){
                     technicians.add(new Technician(Integer.parseInt(data[i++])));
                 }
@@ -63,16 +77,27 @@ public class SolutionReader {
         return new TeamsSchedule(days2);
     }
 
+    public static TTSPSolution solutionReader(File intervDatesFile, File techTeamsFile) throws Exception {
+        InterventionsSchedule interventionsSchedule = readInterventionsSchedule(intervDatesFile);
+        TeamsSchedule teamsSchedule = readTeamsSchedule(techTeamsFile);
+        TTSPSolution ttspSolution = new TTSPSolution(interventionsSchedule, teamsSchedule);
+        ttspSolution.print();
+        return ttspSolution;
+    }
+
+    public static TTSPSolution solutionReader(File intervDatesFile, File techTeamsFile, TTSPData data) throws Exception {
+        InterventionsSchedule interventionsSchedule = readInterventionsSchedule(intervDatesFile, data);
+        TeamsSchedule teamsSchedule = readTeamsSchedule(techTeamsFile);
+        TTSPSolution ttspSolution = new TTSPSolution(interventionsSchedule, teamsSchedule);
+        ttspSolution.print();
+        return ttspSolution;
+    }
+
     public static void main(String[] args) throws Exception {
         File intervDatesFile = new File(args[0] + "/interv_dates");
         File techTeamsFile = new File(args[0] + "/tech_teams");
 
-        InterventionsSchedule interventionsSchedule = readInterventionsSchedule(intervDatesFile);
-        TeamsSchedule teamsSchedule = readTeamsSchedule(techTeamsFile);
-
-        TTSPSolution ttspSolution = new TTSPSolution(interventionsSchedule, teamsSchedule);
-        ttspSolution.print();
-
+        solutionReader(intervDatesFile, techTeamsFile);
 
 
     }

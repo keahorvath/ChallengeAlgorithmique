@@ -1,6 +1,7 @@
+package code;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -74,18 +75,31 @@ public class InstanceReader {
         return technicians;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static TTSPData instanceReader(File instanceFile, File intervListFile, File techListFile) throws FileNotFoundException {
+        Instance instance = readInstance(instanceFile);
+        Intervention[] interventions = readInterventions(intervListFile, instance);
+        Technician[] technicians = readTechnicians(techListFile, instance);
+        //Creation of chepa.TTSPData
+        TTSPData ttspData = new TTSPData(instance, interventions, technicians);
+        ttspData.print();
+        return ttspData;
+    }
+
+    public static final String usage(){
+        return "usage: java -jar instanceReader.jar <absolutePathToFolder>";
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        if (args.length != 1){
+            System.out.println(usage());
+            System.exit(1);
+        }
         File instanceFile = new File(args[0] + "/instance");
         File intervListFile = new File(args[0] + "/interv_list");
         File techListFile = new File(args[0] + "/tech_list");
 
-        Instance instance = readInstance(instanceFile);
-        Intervention[] interventions = readInterventions(intervListFile, instance);
-        Technician[] technicians = readTechnicians(techListFile, instance);
+        instanceReader(instanceFile, intervListFile, techListFile);
 
-        //Creation of TTSPData
-        TTSPData ttspData = new TTSPData(instance, interventions, technicians);
-        ttspData.print();
     }
 
 }

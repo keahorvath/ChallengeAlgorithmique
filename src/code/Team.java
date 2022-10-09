@@ -1,3 +1,5 @@
+package code;
+
 public class Team {
     private int day;
     private int teamNb;
@@ -42,7 +44,7 @@ public class Team {
     public void print(){
         System.out.print("#" + teamNb + " -> ");
         for (Technician t : technicians){
-            System.out.print(t.name + " ");
+            System.out.print(t.getName() + " ");
         }
         System.out.println();
     }

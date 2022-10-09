@@ -1,3 +1,5 @@
+package code;
+
 public class Instance {
     String name;
     int nbDomains;
@@ -16,7 +18,7 @@ public class Instance {
     }
 
     public void print(){
-        System.out.println("///////////// Instance " + this.name + " ////////////");
+        System.out.println("///////////// chepa.Instance " + this.name + " ////////////");
         System.out.println("#Interventions = " + this.nbInterventions);
         System.out.println("#Technicians = " + this.nbTechs);
         System.out.println("#Domains / #Levels = " + this.nbDomains + " / " + this.nbLevels);

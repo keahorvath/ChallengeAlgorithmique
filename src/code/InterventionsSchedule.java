@@ -1,3 +1,5 @@
+package code;
+
 public class InterventionsSchedule {
     Intervention[] interventions;
 
@@ -12,5 +14,6 @@ public class InterventionsSchedule {
         for (Intervention i : interventions){
             i.printResult();
         }
+        System.out.println();
     }
 }

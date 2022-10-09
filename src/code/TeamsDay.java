@@ -1,3 +1,5 @@
+package code;
+
 public class TeamsDay {
 
     private Team[] teams;
@@ -12,6 +14,14 @@ public class TeamsDay {
             }
         }
 
+    }
+
+    public Team[] getTeams() {
+        return teams;
+    }
+
+    public int getDay() {
+        return day;
     }
 
     public void print(){

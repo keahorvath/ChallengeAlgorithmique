@@ -1,3 +1,5 @@
+package code;
+
 public class TTSPSolution {
     InterventionsSchedule interventionsSchedule;
     TeamsSchedule teamsSchedule;
@@ -11,6 +13,6 @@ public class TTSPSolution {
         System.out.println("///////////// Solution ////////////");
         interventionsSchedule.print();
         teamsSchedule.print();
-
+        System.out.println();
     }
 }
