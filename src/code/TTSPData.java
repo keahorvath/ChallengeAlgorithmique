@@ -1,14 +1,26 @@
 package code;
 
 public class TTSPData {
-    Instance instance;
-    Intervention[] interventions;
-    Technician[] technicians;
+    private Instance instance;
+    private Intervention[] interventions;
+    private Technician[] technicians;
 
     public TTSPData(Instance instance, Intervention[] interventions, Technician[] technicians){
         this.instance = instance;
         this.interventions = interventions;
         this.technicians = technicians;
+    }
+
+    public Instance getInstance() {
+        return instance;
+    }
+
+    public Intervention[] getInterventions() {
+        return interventions;
+    }
+
+    public Technician[] getTechnicians() {
+        return technicians;
     }
 
     public void print(){

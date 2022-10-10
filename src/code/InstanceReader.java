@@ -79,7 +79,7 @@ public class InstanceReader {
         Instance instance = readInstance(instanceFile);
         Intervention[] interventions = readInterventions(intervListFile, instance);
         Technician[] technicians = readTechnicians(techListFile, instance);
-        //Creation of chepa.TTSPData
+        //Creation of TTSPData
         TTSPData ttspData = new TTSPData(instance, interventions, technicians);
         ttspData.print();
         return ttspData;

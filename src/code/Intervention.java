@@ -3,18 +3,18 @@ package code;
 public class Intervention {
     final int UNASSIGNED = -1;
 
-    public int number;
-    public int duration;
-    public int[] preds;
-    public int prio;
-    public int cost;
-    public int[][] domains;
+    private int number;
+    private int duration;
+    private int[] preds;
+    private int prio;
+    private int cost;
+    private int[][] domains;
 
-    public boolean completed = false;
-    public boolean hired = false;
-    public int team = UNASSIGNED;
-    public int day = UNASSIGNED;
-    public int time = UNASSIGNED;
+    private boolean completed = false;
+    private boolean hired = false;
+    private int team = UNASSIGNED;
+    private int day = UNASSIGNED;
+    private int time = UNASSIGNED;
 
     public Intervention(int number){
         this.number = number;
@@ -33,6 +33,50 @@ public class Intervention {
         this.team = team;
         this.day = day;
         this.time = time;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public int[] getPreds() {
+        return preds;
+    }
+
+    public int getPrio() {
+        return prio;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int[][] getDomains() {
+        return domains;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public boolean isHired() {
+        return hired;
+    }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getTime() {
+        return time;
     }
 
     public void printInfo(){

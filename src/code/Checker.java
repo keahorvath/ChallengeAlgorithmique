@@ -23,10 +23,11 @@ public class Checker {
                     }
                 }
             }
-            for (Technician tech : data.technicians){
+            for (Technician tech : data.getTechnicians()){
                 for (int u: tech.getUnavailability()){
                     if (u == day.getDay() && workingTechnicians.contains(tech.getName())){
                         System.out.println("[issue] Technician #" + tech.getName() + " was assigned to a team on day " + day.getDay() + " but isn't available");
+                        return false;
                     }
                 }
                 int occurrences1 = Collections.frequency(workingTechnicians, tech.getName());
@@ -52,7 +53,11 @@ public class Checker {
 
         TTSPData data = InstanceReader.instanceReader(instanceFile, intervListFile, techListFile);
         TTSPSolution solution = SolutionReader.solutionReader(intervDatesFile, techTeamsFile, data);
-
+        System.out.println("----------------------------------");
+        System.out.println("------- CHECK CONSTRAINTS --------");
+        System.out.println("----------------------------------");
         boolean isFeasible = check(data, solution);
+        System.out.println("-> FEASIBLE = " + isFeasible);
+        System.out.println();
     }
 }

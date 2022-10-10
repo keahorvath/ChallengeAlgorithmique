@@ -30,10 +30,10 @@ public class SolutionReader {
         while (intervDatesReader.hasNextLine()){
             String str = intervDatesReader.nextLine();
             String[] data = str.split(" ", 0);
-            ttspData.interventions[currentIntervention].fillResults(Integer.parseInt(data[3]), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
+            ttspData.getInterventions()[currentIntervention].fillResults(Integer.parseInt(data[3]), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
             currentIntervention++;
         }
-        return new InterventionsSchedule(ttspData.interventions);
+        return new InterventionsSchedule(ttspData.getInterventions());
     }
 
     public static TeamsSchedule readTeamsSchedule(File file) throws Exception {
@@ -51,7 +51,6 @@ public class SolutionReader {
                     continue;
                 }
                 ArrayList<Technician> technicians = new ArrayList<>();
-                System.out.println(data[i]);
                 while (!data[i].equals("]")){
                     technicians.add(new Technician(Integer.parseInt(data[i++])));
                 }
