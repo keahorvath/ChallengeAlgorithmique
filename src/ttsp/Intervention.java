@@ -1,38 +1,21 @@
-package code;
+package ttsp;
 
 public class Intervention {
-    final int UNASSIGNED = -1;
 
-    private int number;
+    private final int number;
     private int duration;
     private int[] preds;
     private int prio;
     private int cost;
     private int[][] domains;
 
-    private boolean completed = false;
-    private boolean hired = false;
-    private int team = UNASSIGNED;
-    private int day = UNASSIGNED;
-    private int time = UNASSIGNED;
-
-    public Intervention(int number){
+    public Intervention(int number, int duration, int[] preds, int prio, int cost, int[][] domains){
         this.number = number;
-    }
-
-    public void fillInfo(int duration, int[] preds, int prio, int cost, int[][] domains){
         this.duration = duration;
         this.preds = preds;
         this.prio = prio;
         this.cost = cost;
         this.domains = domains;
-    }
-
-    public void fillResults(int team, int day, int time){
-        this.completed = true;
-        this.team = team;
-        this.day = day;
-        this.time = time;
     }
 
     public int getNumber() {
@@ -59,25 +42,6 @@ public class Intervention {
         return domains;
     }
 
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public boolean isHired() {
-        return hired;
-    }
-
-    public int getTeam() {
-        return team;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getTime() {
-        return time;
-    }
 
     public void printInfo(){
         System.out.println("-> Interv #" + this.number);
@@ -94,14 +58,8 @@ public class Intervention {
         System.out.println();
         System.out.print("Predecessors = ");
         for (int p : preds){
-            System.out.println(p + " ");
+            System.out.print(p + " ");
         }
         System.out.println();
-    }
-
-    public void printResult(){
-        if (this.completed){
-            System.out.println("#" + this.number + " day " + this.day + " -> starts at time " + this.time + " / executed by team #" + this.team);
-        }
     }
 }

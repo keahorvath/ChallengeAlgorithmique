@@ -1,9 +1,9 @@
-package code;
+package ttsp;
 
 public class Technician {
 
 
-    private int name;
+    private final int name;
     private int[] domainsLevels;
     private int[] unavailability;
 

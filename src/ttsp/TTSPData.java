@@ -1,19 +1,26 @@
-package code;
+package ttsp;
 
 public class TTSPData {
-    private Instance instance;
+    private final String name;
+    private final int nbDomains;
+    private final int nbLevels;
+    private final int nbTechs;
+    private final int nbInterventions;
+    private final int budget;
     private Intervention[] interventions;
     private Technician[] technicians;
 
-    public TTSPData(Instance instance, Intervention[] interventions, Technician[] technicians){
-        this.instance = instance;
+    public TTSPData(String name, int nbDomains, int nbLevels, int nbTechs, int nbInterventions, int budget, Intervention[] interventions, Technician[] technicians){
+        this.name = name;
+        this.nbDomains = nbDomains;
+        this.nbLevels = nbLevels;
+        this.nbTechs = nbTechs;
+        this.nbInterventions = nbInterventions;
+        this.budget = budget;
         this.interventions = interventions;
         this.technicians = technicians;
     }
 
-    public Instance getInstance() {
-        return instance;
-    }
 
     public Intervention[] getInterventions() {
         return interventions;
@@ -24,7 +31,14 @@ public class TTSPData {
     }
 
     public void print(){
-        this.instance.print();
+
+        System.out.println("///////////// Instance " + this.name + " ////////////");
+        System.out.println("#Interventions = " + this.nbInterventions);
+        System.out.println("#Technicians = " + this.nbTechs);
+        System.out.println("#Domains / #Levels = " + this.nbDomains + " / " + this.nbLevels);
+        System.out.println("Outsourcing budget = " + this.budget);
+        System.out.println();
+
         System.out.println("----------------------------------");
         System.out.println("--------- INTERVENTIONS ----------");
         System.out.println("----------------------------------");
@@ -32,6 +46,7 @@ public class TTSPData {
             i.printInfo();
         }
         System.out.println();
+
         System.out.println("----------------------------------");
         System.out.println("---------- TECHNICIANS -----------");
         System.out.println("----------------------------------");
