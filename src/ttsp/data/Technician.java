@@ -24,10 +24,11 @@ public class Technician {
     public int[] getUnavailability() {
         return unavailability;
     }
-    public void fillInfo(int[] domainsLevels, int[] unavailability){
-        this.domainsLevels = domainsLevels;
-        this.unavailability = unavailability;
+
+    public int getLevelInDomain(int domain){
+        return this.domainsLevels[domain-1];
     }
+
     public void print(){
         System.out.println("-> Tech #" + this.name);
         System.out.print("Skills (mastered level per domain) -> ");

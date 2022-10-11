@@ -36,6 +36,16 @@ public class TTSPData {
         return null;
     }
 
+    public Technician getTechnicianFromNumber(int number){
+        for (Technician t : this.technicians){
+            if (t.getName() == number){
+                return t;
+            }
+        }
+        System.out.println("getTechnicianFromNumber method was called with an invalid number");
+        System.exit(1);
+        return null;
+    }
     public int getNbDomains() {
         return nbDomains;
     }

@@ -1,6 +1,8 @@
 package ttsp;
 
+import ttsp.data.Intervention;
 import ttsp.data.TTSPData;
+import ttsp.solution.InterventionResult;
 import ttsp.solution.TTSPSolution;
 
 import java.io.File;
@@ -8,10 +10,10 @@ import java.io.File;
 public class Evaluator {
 
     public static int evaluate(TTSPData data, TTSPSolution solution){
-        /*
         int c1 =0, c2=0, c3=0, c=0;
         for (Intervention i : data.getInterventions()){
-            int endTime = (i.getDay()-1) + i.getTime() + i.getDuration();
+            InterventionResult iResult = solution.getInterventionResult(i.getNumber());
+            int endTime = iResult.getStartTime() + i.getDuration();
             int prio = i.getPrio();
             if (c < endTime){
                 c = endTime;
@@ -28,9 +30,6 @@ public class Evaluator {
         }
         print(c1, c2, c3, c);
         return 28*c1 + 14*c2 + 4*c3 + c;
-
-         */
-        return 0;
     }
 
     public static void print(int c1, int c2, int c3, int c){

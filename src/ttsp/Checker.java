@@ -19,7 +19,8 @@ public class Checker {
         boolean check2 = checkPredecessorsConstraints(data, solution);
         boolean check3 = checkBudgetConstraint(data, solution);
         boolean check4 = checkTeamConstraints(data, solution);
-        return check1 && check2 && check3 && check4;
+        boolean check5 = checkDomainsLevelsConstraints(data, solution);
+        return check1 && check2 && check3 && check4 && check5;
     }
 
     public static boolean checkTechniciansConstraints(TTSPData data, TTSPSolution solution){
@@ -129,10 +130,28 @@ public class Checker {
     }
 
     public static boolean checkDomainsLevelsConstraints(TTSPData data, TTSPSolution solution){
+        boolean noIssue = true;
         for (InterventionResult i : solution.getInterventionsResults()){
             Team team = solution.getTeamOfDayWithNumber(i.getTeam(), i.getDay());
+            if (team == null){
+                continue;
+            }
+            for (int d = 1; d < data.getNbDomains() + 1; d++) {
+                for (int l = 1; l < data.getNbLevels() + 1; l++) {
+                    int nbTechnicians = team.nbTechniciansOfLevelInDomain(data, l, d);
+                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).getDomains()[d-1][l-1];
+                    if  (nbTechnicians < nbTechniciansRequired){
+                        System.out.print("[issue] Team #" + team.getTeamNb() + " ( ");
+                        for (int t : team.getTechnicians()){
+                            System.out.print(t + " ");
+                        }
+                        System.out.println(") on day " + i.getDay() + " is not skilled enough to perform intervention #" + i.getNumber() + " (domain:" + d + " / level:" + l + " -> " + nbTechnicians + " < " + nbTechniciansRequired + " )");
+                        noIssue = false;
+                    }
+                }
+            }
         }
-        return true;
+        return noIssue;
     }
 
     public static void main(String[] args) throws Exception {
