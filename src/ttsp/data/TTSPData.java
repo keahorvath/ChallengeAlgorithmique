@@ -1,33 +1,11 @@
 package ttsp.data;
 
-public class TTSPData {
-    private final String name;
-    private final int nbDomains;
-    private final int nbLevels;
-    private final int nbTechs;
-    private final int nbInterventions;
-    private final int budget;
-    private Intervention[] interventions;
-    private Technician[] technicians;
+public record TTSPData(String name, int nbDomains, int nbLevels, int nbTechs, int nbInterventions, int budget,
+                       Intervention[] interventions, Technician[] technicians) {
 
-    public TTSPData(String name, int nbDomains, int nbLevels, int nbTechs, int nbInterventions, int budget, Intervention[] interventions, Technician[] technicians){
-        this.name = name;
-        this.nbDomains = nbDomains;
-        this.nbLevels = nbLevels;
-        this.nbTechs = nbTechs;
-        this.nbInterventions = nbInterventions;
-        this.budget = budget;
-        this.interventions = interventions;
-        this.technicians = technicians;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Intervention getInterventionFromNumber(int number){
-        for (Intervention i : this.interventions){
-            if (i.getNumber() == number){
+    public Intervention getInterventionFromNumber(int number) {
+        for (Intervention i : this.interventions) {
+            if (i.number() == number) {
                 return i;
             }
         }
@@ -36,9 +14,9 @@ public class TTSPData {
         return null;
     }
 
-    public Technician getTechnicianFromNumber(int number){
-        for (Technician t : this.technicians){
-            if (t.getName() == number){
+    public Technician getTechnicianFromNumber(int number) {
+        for (Technician t : this.technicians) {
+            if (t.name() == number) {
                 return t;
             }
         }
@@ -46,44 +24,17 @@ public class TTSPData {
         System.exit(1);
         return null;
     }
-    public int getNbDomains() {
-        return nbDomains;
-    }
 
-    public int getNbLevels() {
-        return nbLevels;
-    }
-
-    public int getNbTechs() {
-        return nbTechs;
-    }
-
-    public int getNbInterventions() {
-        return nbInterventions;
-    }
-
-    public int getBudget() {
-        return budget;
-    }
-
-    public Intervention[] getInterventions() {
-        return interventions;
-    }
-
-    public Technician[] getTechnicians() {
-        return technicians;
-    }
-
-    public boolean TechUnavailableOnDay(Technician technician, int day){
-        for (int d: technician.getUnavailability()){
-            if (d == day){
+    public boolean TechUnavailableOnDay(Technician technician, int day) {
+        for (int d : technician.unavailability()) {
+            if (d == day) {
                 return true;
             }
         }
         return false;
     }
 
-    public void print(){
+    public void print() {
 
         System.out.println("///////////// Instance " + this.name + " ////////////");
         System.out.println("#Interventions = " + this.nbInterventions);
@@ -95,7 +46,7 @@ public class TTSPData {
         System.out.println("----------------------------------");
         System.out.println("--------- INTERVENTIONS ----------");
         System.out.println("----------------------------------");
-        for (Intervention i : this.interventions){
+        for (Intervention i : this.interventions) {
             i.printInfo();
         }
         System.out.println();
@@ -103,7 +54,7 @@ public class TTSPData {
         System.out.println("----------------------------------");
         System.out.println("---------- TECHNICIANS -----------");
         System.out.println("----------------------------------");
-        for (Technician t : this.technicians){
+        for (Technician t : this.technicians) {
             t.print();
         }
         System.out.println();

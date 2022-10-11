@@ -26,14 +26,14 @@ public class Checker {
     public static boolean checkTechniciansConstraints(TTSPData data, TTSPSolution solution){
         boolean noIssue = true;
         for (int day = 1; day < solution.getNbDays()+1; day++) {
-            for (Technician tech: data.getTechnicians()) {
-                ArrayList<Integer> teamsAssigned = solution.getTeamsOfTechnician(tech.getName(), day);
+            for (Technician tech: data.technicians()) {
+                ArrayList<Integer> teamsAssigned = solution.getTeamsOfTechnician(tech.name(), day);
                 if (teamsAssigned.size() == 0){
-                    System.out.println("[issue] Technician #" + tech.getName() + " is not assigned to a team on day " + day);
+                    System.out.println("[issue] Technician #" + tech.name() + " is not assigned to a team on day " + day);
                     noIssue = false;
                 }
                 if (teamsAssigned.size() > 1){
-                    System.out.print("[issue] Technician #" + tech.getName() + " is assigned to multiple teams on day " + day + " -> ");
+                    System.out.print("[issue] Technician #" + tech.name() + " is assigned to multiple teams on day " + day + " -> ");
                     for (int i : teamsAssigned){
                         System.out.print(i + " ");
                     }
@@ -41,7 +41,7 @@ public class Checker {
                     noIssue = false;
                 }
                 if (data.TechUnavailableOnDay(tech, day) && teamsAssigned.get(0) != 0){
-                    System.out.println("[issue] Technician #" + tech.getName() + " is assigned to team " + teamsAssigned.get(0) + " on day " + day + " but should be assigned to team 0 because he/she is unavailable");
+                    System.out.println("[issue] Technician #" + tech.name() + " is assigned to team " + teamsAssigned.get(0) + " on day " + day + " but should be assigned to team 0 because he/she is unavailable");
                     noIssue = false;
                 }
             }
@@ -51,24 +51,24 @@ public class Checker {
 
     public static boolean checkPredecessorsConstraints(TTSPData data, TTSPSolution solution){
         boolean noIssue = true;
-        for(Intervention i : data.getInterventions()){
-            InterventionResult iResult = solution.getInterventionResult(i.getNumber());
-            //iResult == null means that i is outsourced
+        for(Intervention i : data.interventions()){
+            InterventionResult iResult = solution.getInterventionResult(i.number());
+            //iResult == null means that intervention is outsourced
             if (iResult == null){
                 continue;
             }
             int startTimeI = iResult.getStartTime();
-            for (int nb : i.getPreds()){
+            for (int nb : i.preds()){
                 Intervention p = data.getInterventionFromNumber(nb);
                 InterventionResult pResult = solution.getInterventionResult(nb);
                 if (pResult == null){
-                    System.out.println("[issue] Intervention #" + i.getNumber() + " is scheduled whereas its predecessor " + p.getNumber() + " is outsourced");
+                    System.out.println("[issue] Intervention #" + i.number() + " is scheduled whereas its predecessor " + p.number() + " is outsourced");
                     noIssue = false;
                     continue;
                 }
-                int endTimeP = pResult.getStartTime() + p.getDuration();
+                int endTimeP = pResult.getStartTime() + p.duration();
                 if (startTimeI < endTimeP){
-                    System.out.println("[issue] Intervention #" + i.getNumber() + " starts before the completion of intervention #" + p.getNumber() + " which is defined as one of its predecessors (day " + iResult.getDay() + " [" + iResult.getTime() + "," + (i.getDuration()+iResult.getTime()) + "] < day " + pResult.getDay() + " [" + pResult.getTime() + "," + (p.getDuration()+pResult.getTime()) + "])");
+                    System.out.println("[issue] Intervention #" + i.number() + " starts before the completion of intervention #" + p.number() + " which is defined as one of its predecessors (day " + iResult.getDay() + " [" + iResult.getTime() + "," + (i.duration()+iResult.getTime()) + "] < day " + pResult.getDay() + " [" + pResult.getTime() + "," + (p.duration()+pResult.getTime()) + "])");
                     noIssue = false;
                 }
             }
@@ -78,19 +78,19 @@ public class Checker {
 
     public static boolean checkBudgetConstraint(TTSPData data, TTSPSolution solution){
         ArrayList<Intervention> outsourcedInterventions = new ArrayList<>();
-        for (Intervention i : data.getInterventions()){
-            if (solution.getInterventionResult(i.getNumber()) == null){
+        for (Intervention i : data.interventions()){
+            if (solution.getInterventionResult(i.number()) == null){
                 outsourcedInterventions.add(i);
             }
         }
         int cost = 0;
         for (Intervention i : outsourcedInterventions){
-            cost += i.getCost();
+            cost += i.cost();
         }
-        if (cost > data.getBudget()){
-            System.out.print("[issue] The total cost of all outsourced interventions is larger than the outsourcing budget : " + cost + " > " + data.getBudget() + " (outsourced interventions : ");
+        if (cost > data.budget()){
+            System.out.print("[issue] The total cost of all outsourced interventions is larger than the outsourcing budget : " + cost + " > " + data.budget() + " (outsourced interventions : ");
             for (Intervention i : outsourcedInterventions){
-                System.out.print(i.getNumber());
+                System.out.print(i.number());
             }
             System.out.println(")");
             return false;
@@ -112,9 +112,9 @@ public class Checker {
                 Arrays.sort(interventionsCompleted, Comparator.comparing(InterventionResult::getTime));
                 for (int i = 1; i < interventionsCompleted.length; i++){
                     int prevStartTime = interventionsCompleted[i-1].getTime();
-                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted[i-1].getNumber()).getDuration() + interventionsCompleted[i-1].getTime();
+                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted[i-1].getNumber()).duration() + interventionsCompleted[i-1].getTime();
                     int currentStartTime =  interventionsCompleted[i].getTime();
-                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted[i].getNumber()).getDuration() + interventionsCompleted[i].getTime();
+                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted[i].getNumber()).duration() + interventionsCompleted[i].getTime();
                     if (prevEndTime > currentStartTime){
                         System.out.println("[issue] Interventions #" + interventionsCompleted[i-1].getNumber() + " and #" + interventionsCompleted[i].getNumber() + " overlap on day " + day + " and are executed by the same team #" + teamNb + " ([" + prevStartTime + "," + prevEndTime + "] and [" + currentStartTime + "," + currentEndTime + "])");
                         noIssue = false;
@@ -136,10 +136,10 @@ public class Checker {
             if (team == null){
                 continue;
             }
-            for (int d = 1; d < data.getNbDomains() + 1; d++) {
-                for (int l = 1; l < data.getNbLevels() + 1; l++) {
+            for (int d = 1; d < data.nbDomains() + 1; d++) {
+                for (int l = 1; l < data.nbLevels() + 1; l++) {
                     int nbTechnicians = team.nbTechniciansOfLevelInDomain(data, l, d);
-                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).getDomains()[d-1][l-1];
+                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l-1];
                     if  (nbTechnicians < nbTechniciansRequired){
                         System.out.print("[issue] Team #" + team.getTeamNb() + " ( ");
                         for (int t : team.getTechnicians()){
@@ -154,7 +154,15 @@ public class Checker {
         return noIssue;
     }
 
+    public static String usage(){
+        return "usage: java -jar checker.jar <absolutePathToFolder>";
+    }
+
     public static void main(String[] args) throws Exception {
+        if (args.length != 1){
+            System.out.println(usage());
+            System.exit(1);
+        }
         File instanceFile = new File(args[0] + "/instance");
         File intervListFile = new File(args[0] + "/interv_list");
         File techListFile = new File(args[0] + "/tech_list");

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class TTSPSolution {
 
-    private InterventionResult[] interventionsResults;
-    private Team[] teams;
-    private int nbDays;
+    private final InterventionResult[] interventionsResults;
+    private final Team[] teams;
+    private final int nbDays;
 
     public TTSPSolution(InterventionResult[] interventionsResults, Team[] teams, int nbDays){
         this.interventionsResults = interventionsResults;
@@ -18,22 +18,10 @@ public class TTSPSolution {
         return interventionsResults;
     }
 
-    public Team[] getTeams() {
-        return teams;
-    }
-
     public int getNbDays() {
         return nbDays;
     }
 
-    public boolean isOutsourced(int number){
-        for (InterventionResult i : this.interventionsResults){
-            if (i.getNumber() == number){
-                return false;
-            }
-        }
-        return true;
-    }
     public InterventionResult getInterventionResult(int number){
         for (InterventionResult i : this.interventionsResults){
             if (i.getNumber() == number){
