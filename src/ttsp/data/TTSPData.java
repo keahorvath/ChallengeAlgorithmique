@@ -1,4 +1,4 @@
-package ttsp;
+package ttsp.data;
 
 public class TTSPData {
     private final String name;
@@ -23,6 +23,17 @@ public class TTSPData {
 
     public String getName() {
         return name;
+    }
+
+    public Intervention getInterventionFromNumber(int number){
+        for (Intervention i : this.interventions){
+            if (i.getNumber() == number){
+                return i;
+            }
+        }
+        System.out.println("getInterventionFromNumber method was called with an invalid number");
+        System.exit(1);
+        return null;
     }
 
     public int getNbDomains() {

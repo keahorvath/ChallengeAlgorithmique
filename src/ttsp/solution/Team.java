@@ -1,4 +1,4 @@
-package ttsp;
+package ttsp.solution;
 
 public class Team {
     private final int day;

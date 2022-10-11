@@ -1,5 +1,8 @@
 package ttsp;
 
+import ttsp.data.TTSPData;
+import ttsp.solution.TTSPSolution;
+
 import java.io.File;
 
 public class Evaluator {

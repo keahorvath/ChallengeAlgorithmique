@@ -1,5 +1,9 @@
 package ttsp;
 
+import ttsp.solution.InterventionResult;
+import ttsp.solution.TTSPSolution;
+import ttsp.solution.Team;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

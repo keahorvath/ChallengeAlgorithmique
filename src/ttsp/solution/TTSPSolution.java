@@ -1,4 +1,4 @@
-package ttsp;
+package ttsp.solution;
 
 import java.util.ArrayList;
 
@@ -26,6 +26,24 @@ public class TTSPSolution {
         return nbDays;
     }
 
+    public boolean isOutsourced(int number){
+        for (InterventionResult i : this.interventionsResults){
+            if (i.getNumber() == number){
+                return false;
+            }
+        }
+        return true;
+    }
+    public InterventionResult getInterventionResult(int number){
+        for (InterventionResult i : this.interventionsResults){
+            if (i.getNumber() == number){
+                return i;
+            }
+        }
+        //Intervention #number is outsourced
+        return null;
+    }
+
     public Team[] getTeamsOfDay(int day){
         ArrayList<Team> teams = new ArrayList<>();
         for (Team t : this.teams){
@@ -40,7 +58,16 @@ public class TTSPSolution {
         return teamsCopy;
     }
 
-    public ArrayList getTeamsOfTechnician(int name, int day){
+    public Team getTeamOfDayWithNumber(int nb, int day){
+        for (Team t : this.teams){
+            if (t.getDay() == day && t.getTeamNb() == nb){
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Integer> getTeamsOfTechnician(int name, int day){
         Team[] teams = getTeamsOfDay(day);
         ArrayList<Integer> teamsAssigned= new ArrayList<>();
         for (Team t : teams){
@@ -53,6 +80,32 @@ public class TTSPSolution {
         return teamsAssigned;
     }
 
+    public InterventionResult[] getInterventionsCompletedOnDay(int day){
+        ArrayList<InterventionResult> interventionsCompleted = new ArrayList<>();
+        for (InterventionResult i : interventionsResults){
+            if (i.getDay() == day){
+                interventionsCompleted.add(i);
+            }
+        }
+        InterventionResult[] interventionsCompletedCopy = new InterventionResult[interventionsCompleted.size()];
+        for (int i = 0; i < interventionsCompletedCopy.length; i++) {
+            interventionsCompletedCopy[i] = interventionsCompleted.get(i);
+        }
+        return interventionsCompletedCopy;
+    }
+    public InterventionResult[] getInterventionsCompletedOnDayByTeam(int day, int teamNb){
+        ArrayList<InterventionResult> interventionsCompleted = new ArrayList<>();
+        for (InterventionResult i : interventionsResults){
+            if (i.getDay() == day && i.getTeam() == teamNb){
+                interventionsCompleted.add(i);
+            }
+        }
+        InterventionResult[] interventionsCompletedCopy = new InterventionResult[interventionsCompleted.size()];
+        for (int i = 0; i < interventionsCompletedCopy.length; i++) {
+            interventionsCompletedCopy[i] = interventionsCompleted.get(i);
+        }
+        return interventionsCompletedCopy;
+    }
     public void print(){
         System.out.println("///////////// Solution ////////////");
         System.out.println("----------------------------------");

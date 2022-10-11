@@ -1,4 +1,4 @@
-package ttsp;
+package ttsp.solution;
 
 public class InterventionResult {
 
@@ -14,6 +14,25 @@ public class InterventionResult {
         this.time = time;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getStartTime(){
+        return (day-1)*120 + time;
+    }
     public void print(){
         System.out.println("#" + this.number + " day " + this.day + " -> starts at time " + this.time + " / executed by team #" + this.team);
     }

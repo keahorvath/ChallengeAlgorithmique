@@ -1,4 +1,4 @@
-package ttsp;
+package ttsp.data;
 
 public class Intervention {
 
