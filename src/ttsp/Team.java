@@ -3,9 +3,9 @@ package ttsp;
 public class Team {
     private final int day;
     private final int teamNb;
-    private final Technician[] technicians;
+    private final int[] technicians;
 
-    public Team(int day, int teamNb, Technician[] technicians){
+    public Team(int day, int teamNb, int[] technicians){
         this.day = day;
         this.teamNb = teamNb;
         this.technicians = technicians;
@@ -14,8 +14,8 @@ public class Team {
         return teamNb;
     }
 
-    public Technician[] getTechnicians() {
-        return technicians;
+    public int[] getTechnicians() {
+        return this.technicians;
     }
 
     public int getDay() {
@@ -24,8 +24,8 @@ public class Team {
 
     public void print(){
         System.out.print("#" + teamNb + " -> ");
-        for (Technician t : technicians){
-            System.out.print(t.getName() + " ");
+        for (int t : this.technicians){
+            System.out.print(t + " ");
         }
         System.out.println();
     }

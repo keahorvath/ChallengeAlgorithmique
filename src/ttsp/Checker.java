@@ -11,41 +11,29 @@ public class Checker {
     }
 
     public static boolean checkTechnicians(TTSPData data, TTSPSolution solution){
-        /*
-        for (TeamsDay day : solution.getTeamsSchedule().getDays()) {
-            ArrayList<Integer> workingTechnicians = new ArrayList<>();
-            ArrayList<Integer> notWorkingTechnicians = new ArrayList<>();
-            for (Team t : day.getTeams()){
-                for (Technician tech : t.getTechnicians()){
-                    if (t.getTeamNb() == 0){
-                        notWorkingTechnicians.add(tech.getName());
-                    }else{
-                        workingTechnicians.add(tech.getName());
-                    }
+        boolean noIssue = true;
+        for (int day = 1; day < solution.getNbDays()+1; day++) {
+            for (Technician tech: data.getTechnicians()) {
+                ArrayList<Integer> teamsAssigned = solution.getTeamsOfTechnician(tech.getName(), day);
+                if (teamsAssigned.size() == 0){
+                    System.out.println("[issue] Technician #" + tech.getName() + " is not assigned to a team on day " + day);
+                    noIssue = false;
                 }
-            }
-            for (Technician tech : data.getTechnicians()){
-                for (int u: tech.getUnavailability()){
-                    if (u == day.getDay() && workingTechnicians.contains(tech.getName())){
-                        System.out.println("[issue] Technician #" + tech.getName() + " was assigned to a team on day " + day.getDay() + " but should be assigned to team 0 because he/she is unavailable");
-                        return false;
+                if (teamsAssigned.size() > 1){
+                    System.out.print("[issue] Technician #" + tech.getName() + " is assigned to multiple teams on day " + day + " -> ");
+                    for (int i : teamsAssigned){
+                        System.out.print(i + " ");
                     }
+                    System.out.println();
+                    noIssue = false;
                 }
-                int occurrences1 = Collections.frequency(workingTechnicians, tech.getName());
-                int occurrences2 = Collections.frequency(notWorkingTechnicians, tech.getName());
-                if (occurrences1 + occurrences2 == 0){
-                    System.out.println("[issue] Technician #" + tech.getName() + " is not assigned to a team on day " + day.getDay());
-                    return false;
-                }else if (occurrences1 + occurrences2 > 1){
-                    System.out.println("[issue] Technician #" + tech.getName() + " is assigned to multiple teams on day " + day.getDay());
-                    return false;
+                if (data.TechUnavailableOnDay(tech, day) && teamsAssigned.get(0) != 0){
+                    System.out.println("[issue] Technician #" + tech.getName() + " is assigned to team " + teamsAssigned.get(0) + " on day " + day + " but should be assigned to team 0 because he/she is unavailable");
+                    noIssue = false;
                 }
             }
         }
-        return true;
-
-         */
-        return true;
+        return noIssue;
     }
 
     public static boolean checkInterventions(TTSPData data, TTSPSolution solution){

@@ -14,6 +14,18 @@ public class TTSPSolution {
         this.nbDays = nbDays;
     }
 
+    public InterventionResult[] getInterventionsResults() {
+        return interventionsResults;
+    }
+
+    public Team[] getTeams() {
+        return teams;
+    }
+
+    public int getNbDays() {
+        return nbDays;
+    }
+
     public Team[] getTeamsOfDay(int day){
         ArrayList<Team> teams = new ArrayList<>();
         for (Team t : this.teams){
@@ -28,6 +40,19 @@ public class TTSPSolution {
         return teamsCopy;
     }
 
+    public ArrayList getTeamsOfTechnician(int name, int day){
+        Team[] teams = getTeamsOfDay(day);
+        ArrayList<Integer> teamsAssigned= new ArrayList<>();
+        for (Team t : teams){
+            for (int tech: t.getTechnicians()){
+                if (tech == name){
+                    teamsAssigned.add(t.getTeamNb());
+                }
+            }
+        }
+        return teamsAssigned;
+    }
+
     public void print(){
         System.out.println("///////////// Solution ////////////");
         System.out.println("----------------------------------");
@@ -40,7 +65,7 @@ public class TTSPSolution {
         System.out.println("----------------------------------");
         System.out.println("------- TECHNICIAN TEAMS ---------");
         System.out.println("----------------------------------");
-        for (int day = 0; day < this.nbDays; day++) {
+        for (int day = 1; day < this.nbDays+1; day++) {
             System.out.println("Teams of day " + day);
             for (Team t : getTeamsOfDay(day)){
                 t.print();

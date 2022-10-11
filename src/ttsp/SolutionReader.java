@@ -36,15 +36,15 @@ public class SolutionReader {
                     currentTeam++;
                     continue;
                 }
-                ArrayList<Technician> technicians = new ArrayList<>();
+                ArrayList<Integer> technicians = new ArrayList<>();
                 while (!data[i].equals("]")){
-                    technicians.add(new Technician(Integer.parseInt(data[i++])));
+                    technicians.add(Integer.parseInt(data[i++]));
                 }
-                Technician[] techs = new Technician[technicians.size()];
+                int[] techniciansCopy = new int[technicians.size()];
                 for (int j = 0; j < technicians.size(); j++) {
-                    techs[j] = technicians.get(j);
+                    techniciansCopy[j] = technicians.get(j);
                 }
-                teams.add(new Team(day, currentTeam, techs));
+                teams.add(new Team(day, currentTeam, techniciansCopy));
             }
         }
         Team[] teamsCopy = new Team[teams.size()];

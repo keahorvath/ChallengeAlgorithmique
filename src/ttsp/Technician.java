@@ -7,8 +7,10 @@ public class Technician {
     private int[] domainsLevels;
     private int[] unavailability;
 
-    public Technician(int name){
+    public Technician(int name, int[] domainsLevels, int[] unavailability){
         this.name = name;
+        this.domainsLevels = domainsLevels;
+        this.unavailability = unavailability;
     }
 
     public int getName() {

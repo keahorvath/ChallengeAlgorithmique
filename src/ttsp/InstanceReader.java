@@ -53,16 +53,15 @@ public class InstanceReader {
                 domainsLevels[j] = Integer.parseInt(data3[j + 1]);
             }
             int currentI = nbDomains + 2;
-            ArrayList<Integer> unavail1 = new ArrayList<>();
+            ArrayList<Integer> unavailability = new ArrayList<>();
             while (!data3[currentI].equals("]")) {
-                unavail1.add(Integer.parseInt(data3[currentI++]));
+                unavailability.add(Integer.parseInt(data3[currentI++]));
             }
-            int[] unavail2 = new int[unavail1.size()];
-            for (int a = 0; a < unavail1.size(); a++) {
-                unavail2[a] = unavail1.get(a);
+            int[] unavailabilityCopy = new int[unavailability.size()];
+            for (int a = 0; a < unavailability.size(); a++) {
+                unavailabilityCopy[a] = unavailability.get(a);
             }
-            technicians[i] = new Technician(name);
-            technicians[i].fillInfo(domainsLevels, unavail2);
+            technicians[i] = new Technician(name, domainsLevels, unavailabilityCopy);
         }
         return technicians;
     }
@@ -73,10 +72,16 @@ public class InstanceReader {
         String str = instanceReader.nextLine();
         String[] data1 = str.split(" ", 0);
 
-        Intervention[] interventions = readInterventions(intervListFile, Integer.parseInt(data1[4]), Integer.parseInt(data1[2]), Integer.parseInt(data1[1]));
-        Technician[] technicians = readTechnicians(techListFile, Integer.parseInt(data1[2]), Integer.parseInt(data1[1]));
+        String name = data1[0];
+        int nbDomains = Integer.parseInt(data1[1]);
+        int nbLevels = Integer.parseInt(data1[2]);
+        int nbTechs = Integer.parseInt(data1[3]);
+        int nbInterventions = Integer.parseInt(data1[4]);
+        int budget = Integer.parseInt(data1[5]);
+        Intervention[] interventions = readInterventions(intervListFile, nbInterventions, nbLevels, nbDomains);
+        Technician[] technicians = readTechnicians(techListFile, nbTechs, nbDomains);
 
-        TTSPData ttspData = new TTSPData(data1[0], Integer.parseInt(data1[1]), Integer.parseInt(data1[2]), Integer.parseInt(data1[3]), Integer.parseInt(data1[4]), Integer.parseInt(data1[5]), interventions, technicians);
+        TTSPData ttspData = new TTSPData(name, nbDomains, nbLevels, nbTechs, nbInterventions, budget, interventions, technicians);
         ttspData.print();
         return ttspData;
     }

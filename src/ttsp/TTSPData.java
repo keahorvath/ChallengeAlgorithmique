@@ -21,6 +21,29 @@ public class TTSPData {
         this.technicians = technicians;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getNbDomains() {
+        return nbDomains;
+    }
+
+    public int getNbLevels() {
+        return nbLevels;
+    }
+
+    public int getNbTechs() {
+        return nbTechs;
+    }
+
+    public int getNbInterventions() {
+        return nbInterventions;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
 
     public Intervention[] getInterventions() {
         return interventions;
@@ -28,6 +51,15 @@ public class TTSPData {
 
     public Technician[] getTechnicians() {
         return technicians;
+    }
+
+    public boolean TechUnavailableOnDay(Technician technician, int day){
+        for (int d: technician.getUnavailability()){
+            if (d == day){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void print(){
