@@ -2,7 +2,6 @@ package ttsp.data;
 
 public record Intervention(int number, int duration, int[] preds, int prio, int cost, int[][] domains) {
 
-
     public void printInfo() {
         System.out.println("-> Interv #" + this.number);
         System.out.println("Time = " + this.duration + " Priority = " + this.prio + " Cost = " + this.cost);

@@ -63,5 +63,6 @@ public class Evaluator {
         TTSPSolution solution = SolutionReader.solutionReader(intervDatesFile, techTeamsFile);
         int value = evaluate(data, solution);
         System.out.println("-> TOTAL COST = " + value);
+        System.out.println();
     }
 }
