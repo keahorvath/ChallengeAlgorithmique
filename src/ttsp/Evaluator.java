@@ -14,7 +14,11 @@ public class Evaluator {
         int c1 =0, c2=0, c3=0, c=0;
         for (Intervention i : data.interventions()){
             InterventionResult iResult = solution.getInterventionResult(i.number());
+            if (iResult == null){
+                continue;
+            }
             int endTime = iResult.getStartTime() + i.duration();
+
             int prio = i.prio();
             if (c < endTime){
                 c = endTime;
