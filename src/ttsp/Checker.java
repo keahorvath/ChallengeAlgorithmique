@@ -62,7 +62,7 @@ public class Checker {
                 Intervention p = data.getInterventionFromNumber(nb);
                 InterventionResult pResult = solution.getInterventionResult(nb);
                 if (pResult == null){
-                    System.out.println("[issue] Intervention #" + i.number() + " is scheduled whereas its predecessor " + p.number() + " is outsourced");
+                    System.out.println("[issue] Intervention #" + i.number() + " is scheduled whereas its predecessor #" + p.number() + " is outsourced");
                     noIssue = false;
                     continue;
                 }

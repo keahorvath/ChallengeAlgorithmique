@@ -2,7 +2,6 @@ package ttsp.data;
 
 public record Technician(int name, int[] domainsLevels, int[] unavailability) {
 
-
     public int getLevelInDomain(int domain) {
         return this.domainsLevels[domain - 1];
     }
