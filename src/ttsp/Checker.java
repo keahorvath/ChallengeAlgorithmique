@@ -102,7 +102,7 @@ public class Checker {
         boolean noIssue = true;
         for (int day = 1; day < solution.getNbDays() + 1; day++){
             for (InterventionResult i : solution.getInterventionsCompletedOnDay(day)){
-                if (i.getTeam() >= solution.getTeamsOfDay(day).length){
+                if (!solution.hasTeam(day, i.getTeam())){
                     System.out.println("[issue] Intervention #" + i.getNumber() + " is assigned to team #" + i.getTeam() + " which does not exist on day " + day);
                     noIssue = false;
                 }
@@ -137,9 +137,9 @@ public class Checker {
                 continue;
             }
             for (int d = 1; d < data.nbDomains() + 1; d++) {
-                for (int l = 1; l < data.nbLevels() + 1; l++) {
+                for (int l = 0; l < data.nbLevels() ; l++) {
                     int nbTechnicians = team.nbTechniciansOfLevelInDomain(data, l, d);
-                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l-1];
+                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l];
                     if  (nbTechnicians < nbTechniciansRequired){
                         System.out.print("[issue] Team #" + team.getTeamNb() + " ( ");
                         for (int t : team.getTechnicians()){

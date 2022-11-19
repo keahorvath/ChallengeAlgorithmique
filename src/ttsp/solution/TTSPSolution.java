@@ -1,5 +1,10 @@
 package ttsp.solution;
 
+import ttsp.Evaluator;
+import ttsp.Solver;
+import ttsp.data.TTSPData;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 public class TTSPSolution {
@@ -12,6 +17,71 @@ public class TTSPSolution {
         this.interventionsResults = interventionsResults;
         this.teams = teams;
         this.nbDays = nbDays;
+    }
+
+    public TTSPSolution(TTSPData data, int[][][] x, int[][][] y, int[] o, int[] b){
+        ArrayList<Team> teams = new ArrayList<>();
+        for (int k = 0; k < data.nbInterventions(); k++) {
+            int nbTeamsOnDay = 0;
+            for (int g = 0; g < data.nbTechs(); g++) {
+                ArrayList<Integer> technicians = new ArrayList<>();
+                for (int t = 0; t < data.nbTechs(); t++) {
+                    if (x[t][g][k] == 1){
+                        technicians.add(t+1);
+                    }
+                }
+                int size = technicians.size();
+                if (size != 0){
+                    int[] techniciansCopy = new int[size];
+                    for (int a = 0; a < size; a++) {
+                        techniciansCopy[a] = technicians.get(a);
+                    }
+                    teams.add(new Team(k+1, g, techniciansCopy));
+                    nbTeamsOnDay++;
+                }
+            }
+            if (nbTeamsOnDay <= 1){
+                teams.remove(teams.size()-1);
+            }
+        }
+        int size = teams.size();
+        Team[] teamsCopy = new Team[size];
+        for (int a = 0; a < size; a++) {
+            teamsCopy[a] = teams.get(a);
+        }
+
+        this.teams = teamsCopy;
+
+        int nbDays = 0;
+        for (Team t : this.teams){
+            if (t.getDay() > nbDays){
+                nbDays =t.getDay();
+            }
+        }
+        this.nbDays = nbDays;
+
+        ArrayList<InterventionResult> interventionsResults = new ArrayList<>();
+        for (int i = 0; i < data.nbInterventions(); i++) {
+            if (o[i] == 0){
+                for (int g = 0; g < data.nbTechs(); g++) {
+                    for (int k = 0; k < data.nbInterventions(); k++) {
+                        if (y[i][g][k] == 1){
+                            System.out.println("intervention" + (i+1) + " : b=" + b[i] + " end=" + (b[i]+data.interventions()[i].duration()));
+                            InterventionResult res = new InterventionResult(i+1, g, b[i]/120 + 1, b[i]%120);
+                            interventionsResults.add(res);
+                        }
+                    }
+                }
+            }
+        }
+        int size2 = interventionsResults.size();
+        InterventionResult[] interventionsResultsCopy = new InterventionResult[size2];
+        for (int a = 0; a < size2; a++) {
+            interventionsResultsCopy[a] = interventionsResults.get(a);
+        }
+
+        this.interventionsResults = interventionsResultsCopy;
+
     }
 
     public InterventionResult[] getInterventionsResults() {
@@ -32,6 +102,14 @@ public class TTSPSolution {
         return null;
     }
 
+    public boolean hasTeam(int day, int teamNb){
+        for (Team t : teams){
+            if (t.getDay() == day && t.getTeamNb() == teamNb){
+                return true;
+            }
+        }
+        return false;
+    }
     public Team[] getTeamsOfDay(int day){
         ArrayList<Team> teams = new ArrayList<>();
         for (Team t : this.teams){

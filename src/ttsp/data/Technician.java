@@ -7,6 +7,10 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) {
         return this.domainsLevels[domain - 1];
     }
 
+    public boolean isTechnicianQualified(int domain, int level){
+        return this.domainsLevels[domain] > level;
+    }
+
     public void print() {
         System.out.println("-> Tech #" + this.name);
         System.out.print("Skills (mastered level per domain) -> ");
