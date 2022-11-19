@@ -325,6 +325,7 @@ public class Solver {
 
         } else {
             System.err.println("Fail! (Status: " + model.get(GRB.IntAttr.Status) + ")");
+            return null;
         }
 
         int[][][] xCopy = new int[data.nbTechs()][data.nbTechs()][data.nbInterventions()];
@@ -375,7 +376,17 @@ public class Solver {
 
         TTSPData data = instanceReader(instanceFile, intervListFile, techListFile);
         TTSPSolution sol = solver(data, Integer.parseInt(args[1]));
+        if (sol == null){
+            System.out.println("Solver couldn't find a solution within the time limit");
+        }else{
+            System.out.println("Checking solution...");
+            boolean check = Checker.check(data, sol);
+            if (check){
+                System.out.println("Solution is feasible");
+            }else{
+                System.out.println("Solution is not feasible");
+            }
+        }
 
-        boolean check = Checker.check(data, sol);
     }
 }
