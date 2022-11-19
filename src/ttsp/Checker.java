@@ -137,9 +137,9 @@ public class Checker {
                 continue;
             }
             for (int d = 1; d < data.nbDomains() + 1; d++) {
-                for (int l = 0; l < data.nbLevels() ; l++) {
+                for (int l = 1; l < data.nbLevels() ; l++) {
                     int nbTechnicians = team.nbTechniciansOfLevelInDomain(data, l, d);
-                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l];
+                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l-1];
                     if  (nbTechnicians < nbTechniciansRequired){
                         System.out.print("[issue] Team #" + team.getTeamNb() + " ( ");
                         for (int t : team.getTechnicians()){

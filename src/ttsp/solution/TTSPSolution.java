@@ -66,7 +66,6 @@ public class TTSPSolution {
                 for (int g = 0; g < data.nbTechs(); g++) {
                     for (int k = 0; k < data.nbInterventions(); k++) {
                         if (y[i][g][k] == 1){
-                            System.out.println("intervention" + (i+1) + " : b=" + b[i] + " end=" + (b[i]+data.interventions()[i].duration()));
                             InterventionResult res = new InterventionResult(i+1, g, b[i]/120 + 1, b[i]%120);
                             interventionsResults.add(res);
                         }

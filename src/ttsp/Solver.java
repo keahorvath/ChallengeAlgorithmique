@@ -186,7 +186,6 @@ public class Solver {
             model.addConstr(0, GRB.LESS_EQUAL, expr, String.format("Constraint 6"));
         }
 
-
         // Contrainte (7)
         for (int i = 0; i < data.nbInterventions(); i++) {
             for (int j = 0; j < data.nbInterventions(); j++) {
@@ -322,7 +321,7 @@ public class Solver {
             System.out.println("Succes! (Status: " + model.get(GRB.IntAttr.Status) + ")");
             System.out.println("Runtime : " + Math.round(model.get(DoubleAttr.Runtime) * 1000) / 1000.0 + " seconds");
             System.out.println("--> Printing results ");
-            System.out.println("Objective value = " + model.get(DoubleAttr.ObjVal));
+            System.out.println("Objective value = " + Math.round((float)model.get(DoubleAttr.ObjVal)));
 
         } else {
             System.err.println("Fail! (Status: " + model.get(GRB.IntAttr.Status) + ")");
@@ -353,18 +352,9 @@ public class Solver {
 
         int[] bCopy = new int[data.nbInterventions()];
         for (int i = 0; i < data.nbInterventions(); i++) {
-            System.out.println("b" + (i+1) + " = " + (int)b[i].get(DoubleAttr.X));
-            bCopy[i] = (int)b[i].get(DoubleAttr.X);
+            bCopy[i] = Math.round((float)b[i].get(DoubleAttr.X));
         }
 
-        /*
-        for (int i = 0; i < data.nbInterventions(); i++) {
-            for (int j = 0; j < data.nbInterventions(); j++) {
-                System.out.println("u" + (i+1) + (j+1) + " = " + (int)u[i][j].get(DoubleAttr.X));
-            }
-        }
-
-         */
         TTSPSolution solution = new TTSPSolution(data, xCopy, yCopy, oCopy, bCopy);
         solution.print();
         return solution;
