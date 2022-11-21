@@ -10,17 +10,20 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) {
         return this.domainsLevels[domain] > level;
     }
 
-    public void print() {
-        System.out.println("-> Tech #" + this.name);
-        System.out.print("Skills (mastered level per domain) -> ");
+    @Override
+    public String toString(){
+        StringBuilder s = new StringBuilder();
+        s.append("-> Tech #").append(this.name).append("\n");
+        s.append("Skills (mastered level per domain) -> ");
         for (int i : this.domainsLevels) {
-            System.out.print(i + " ");
+            s.append(i).append(" ");
         }
-        System.out.println();
-        System.out.print("Not available on day(s) -> ");
+        s.append("\n");
+        s.append("Not available on day(s) -> ");
         for (int i : this.unavailability) {
-            System.out.print(i + " ");
+            s.append(i).append(" ");
         }
-        System.out.println();
+        s.append("\n");
+        return s.toString();
     }
 }

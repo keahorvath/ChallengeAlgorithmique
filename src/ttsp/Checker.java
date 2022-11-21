@@ -68,7 +68,7 @@ public class Checker {
                 }
                 int endTimeP = pResult.getStartTime() + p.duration();
                 if (startTimeI < endTimeP){
-                    System.out.println("[issue] Intervention #" + i.number() + " starts before the completion of intervention #" + p.number() + " which is defined as one of its predecessors (day " + iResult.getDay() + " [" + iResult.getTime() + "," + (i.duration()+iResult.getTime()) + "] < day " + pResult.getDay() + " [" + pResult.getTime() + "," + (p.duration()+pResult.getTime()) + "])");
+                    System.out.println("[issue] Intervention #" + i.number() + " starts before the completion of intervention #" + p.number() + " which is defined as one of its predecessors (day " + iResult.day() + " [" + iResult.time() + "," + (i.duration()+iResult.time()) + "] < day " + pResult.day() + " [" + pResult.time() + "," + (p.duration()+pResult.time()) + "])");
                     noIssue = false;
                 }
             }
@@ -102,50 +102,46 @@ public class Checker {
         boolean noIssue = true;
         for (int day = 1; day < solution.getNbDays() + 1; day++){
             for (InterventionResult i : solution.getInterventionsCompletedOnDay(day)){
-                if (!solution.hasTeam(day, i.getTeam())){
-                    System.out.println("[issue] Intervention #" + i.getNumber() + " is assigned to team #" + i.getTeam() + " which does not exist on day " + day);
+                if (!solution.hasTeam(day, i.team())){
+                    System.out.println("[issue] Intervention #" + i.number() + " is assigned to team #" + i.team() + " which does not exist on day " + day);
                     noIssue = false;
                 }
             }
             for (int teamNb = 1; teamNb < solution.getTeamsOfDay(day).length; teamNb++){
                 InterventionResult[] interventionsCompleted = solution.getInterventionsCompletedOnDayByTeam(day, teamNb);
-                Arrays.sort(interventionsCompleted, Comparator.comparing(InterventionResult::getTime));
+                Arrays.sort(interventionsCompleted, Comparator.comparing(InterventionResult::time));
                 for (int i = 1; i < interventionsCompleted.length; i++){
-                    int prevStartTime = interventionsCompleted[i-1].getTime();
-                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted[i-1].getNumber()).duration() + interventionsCompleted[i-1].getTime();
-                    int currentStartTime =  interventionsCompleted[i].getTime();
-                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted[i].getNumber()).duration() + interventionsCompleted[i].getTime();
+                    int prevStartTime = interventionsCompleted[i-1].time();
+                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted[i-1].number()).duration() + interventionsCompleted[i-1].time();
+                    int currentStartTime =  interventionsCompleted[i].time();
+                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted[i].number()).duration() + interventionsCompleted[i].time();
                     if (prevEndTime > currentStartTime){
-                        System.out.println("[issue] Interventions #" + interventionsCompleted[i-1].getNumber() + " and #" + interventionsCompleted[i].getNumber() + " overlap on day " + day + " and are executed by the same team #" + teamNb + " ([" + prevStartTime + "," + prevEndTime + "] and [" + currentStartTime + "," + currentEndTime + "])");
+                        System.out.println("[issue] Interventions #" + interventionsCompleted[i-1].number() + " and #" + interventionsCompleted[i].number() + " overlap on day " + day + " and are executed by the same team #" + teamNb + " ([" + prevStartTime + "," + prevEndTime + "] and [" + currentStartTime + "," + currentEndTime + "])");
                         noIssue = false;
                     }
                 }
-
             }
-
-
         }
-
         return noIssue;
     }
 
     public static boolean checkDomainsLevelsConstraints(TTSPData data, TTSPSolution solution){
         boolean noIssue = true;
         for (InterventionResult i : solution.getInterventionsResults()){
-            Team team = solution.getTeamOfDayWithNumber(i.getTeam(), i.getDay());
+            Team team = solution.getTeamOfDayWithNumber(i.team(), i.day());
             if (team == null){
                 continue;
             }
             for (int d = 1; d < data.nbDomains() + 1; d++) {
                 for (int l = 1; l < data.nbLevels() ; l++) {
                     int nbTechnicians = team.nbTechniciansOfLevelInDomain(data, l, d);
-                    int nbTechniciansRequired = data.getInterventionFromNumber(i.getNumber()).domains()[d-1][l-1];
+                    int nbTechniciansRequired = data.getInterventionFromNumber(i.number()).domains()[d-1][l-1];
                     if  (nbTechnicians < nbTechniciansRequired){
-                        System.out.print("[issue] Team #" + team.getTeamNb() + " ( ");
-                        for (int t : team.getTechnicians()){
+                        System.out.print("[issue] Team #" + team.teamNb() + " ( ");
+                        for (int t : team.technicians()){
                             System.out.print(t + " ");
                         }
-                        System.out.println(") on day " + i.getDay() + " is not skilled enough to perform intervention #" + i.getNumber() + " (domain:" + d + " / level:" + l + " -> " + nbTechnicians + " < " + nbTechniciansRequired + " )");
+                        System.out.println(") on day " + i.day() + " is not skilled enough to perform intervention #" + i.number() + " (domain:" + d + " / level:" + l + " -> " + nbTechnicians + " < " + nbTechniciansRequired + " )");
                         noIssue = false;
                     }
                 }
@@ -170,7 +166,9 @@ public class Checker {
         File techTeamsFile = new File(args[0] + "/tech_teams");
 
         TTSPData data = InstanceReader.instanceReader(instanceFile, intervListFile, techListFile);
+        System.out.println(data);
         TTSPSolution solution = SolutionReader.solutionReader(intervDatesFile, techTeamsFile);
+        System.out.println(solution);
         System.out.println("----------------------------------");
         System.out.println("------- CHECK CONSTRAINTS --------");
         System.out.println("----------------------------------");

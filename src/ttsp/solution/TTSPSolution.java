@@ -1,10 +1,6 @@
 package ttsp.solution;
 
-import ttsp.Evaluator;
-import ttsp.Solver;
 import ttsp.data.TTSPData;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 public class TTSPSolution {
@@ -54,8 +50,8 @@ public class TTSPSolution {
 
         int nbDays = 0;
         for (Team t : this.teams){
-            if (t.getDay() > nbDays){
-                nbDays =t.getDay();
+            if (t.day() > nbDays){
+                nbDays =t.day();
             }
         }
         this.nbDays = nbDays;
@@ -93,7 +89,7 @@ public class TTSPSolution {
 
     public InterventionResult getInterventionResult(int number){
         for (InterventionResult i : this.interventionsResults){
-            if (i.getNumber() == number){
+            if (i.number() == number){
                 return i;
             }
         }
@@ -103,7 +99,7 @@ public class TTSPSolution {
 
     public boolean hasTeam(int day, int teamNb){
         for (Team t : teams){
-            if (t.getDay() == day && t.getTeamNb() == teamNb){
+            if (t.day() == day && t.teamNb() == teamNb){
                 return true;
             }
         }
@@ -112,7 +108,7 @@ public class TTSPSolution {
     public Team[] getTeamsOfDay(int day){
         ArrayList<Team> teams = new ArrayList<>();
         for (Team t : this.teams){
-            if (t.getDay() == day){
+            if (t.day() == day){
                 teams.add(t);
             }
         }
@@ -125,7 +121,7 @@ public class TTSPSolution {
 
     public Team getTeamOfDayWithNumber(int nb, int day){
         for (Team t : this.teams){
-            if (t.getDay() == day && t.getTeamNb() == nb){
+            if (t.day() == day && t.teamNb() == nb){
                 return t;
             }
         }
@@ -136,9 +132,9 @@ public class TTSPSolution {
         Team[] teams = getTeamsOfDay(day);
         ArrayList<Integer> teamsAssigned= new ArrayList<>();
         for (Team t : teams){
-            for (int tech: t.getTechnicians()){
+            for (int tech: t.technicians()){
                 if (tech == name){
-                    teamsAssigned.add(t.getTeamNb());
+                    teamsAssigned.add(t.teamNb());
                 }
             }
         }
@@ -148,7 +144,7 @@ public class TTSPSolution {
     public InterventionResult[] getInterventionsCompletedOnDay(int day){
         ArrayList<InterventionResult> interventionsCompleted = new ArrayList<>();
         for (InterventionResult i : interventionsResults){
-            if (i.getDay() == day){
+            if (i.day() == day){
                 interventionsCompleted.add(i);
             }
         }
@@ -161,7 +157,7 @@ public class TTSPSolution {
     public InterventionResult[] getInterventionsCompletedOnDayByTeam(int day, int teamNb){
         ArrayList<InterventionResult> interventionsCompleted = new ArrayList<>();
         for (InterventionResult i : interventionsResults){
-            if (i.getDay() == day && i.getTeam() == teamNb){
+            if (i.day() == day && i.team() == teamNb){
                 interventionsCompleted.add(i);
             }
         }
@@ -171,24 +167,26 @@ public class TTSPSolution {
         }
         return interventionsCompletedCopy;
     }
-    public void print(){
-        System.out.println("///////////// Solution ////////////");
-        System.out.println("----------------------------------");
-        System.out.println("----- INTERVENTION SCHEDULE ------");
-        System.out.println("----------------------------------");
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("///////////// Solution ////////////\n");
+        s.append("----------------------------------\n");
+        s.append("----- INTERVENTION SCHEDULE ------\n");
+        s.append("----------------------------------\n");
         for (InterventionResult i : this.interventionsResults){
-            i.print();
+            s.append(i);
         }
-        System.out.println();
-        System.out.println("----------------------------------");
-        System.out.println("------- TECHNICIAN TEAMS ---------");
-        System.out.println("----------------------------------");
+        s.append("\n----------------------------------\n");
+        s.append("------- TECHNICIAN TEAMS ---------\n");
+        s.append("----------------------------------\n");
         for (int day = 1; day < this.nbDays+1; day++) {
-            System.out.println("Teams of day " + day);
+            s.append("Teams of day ").append(day).append("\n");
             for (Team t : getTeamsOfDay(day)){
-                t.print();
+                s.append(t).append("\n");
             }
         }
-        System.out.println();
+        return s.toString();
     }
 }

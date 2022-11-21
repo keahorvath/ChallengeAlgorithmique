@@ -1,39 +1,13 @@
 package ttsp.solution;
 
-public class InterventionResult {
+public record InterventionResult(int number, int team, int day, int time) {
 
-    private final int number;
-    private final int team;
-    private final int day;
-    private final int time;
-
-    public InterventionResult(int number, int team, int day, int time){
-        this.number = number;
-        this.team = team;
-        this.day = day;
-        this.time = time;
+    public int getStartTime() {
+        return (day - 1) * 120 + time;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-    public int getTeam() {
-        return team;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public int getStartTime(){
-        return (day-1)*120 + time;
-    }
-    public void print(){
-        System.out.println("#" + this.number + " day " + this.day + " -> starts at time " + this.time + " / executed by team #" + this.team);
+    @Override
+    public String toString(){
+        return "#" + this.number + " day " + this.day + " -> starts at time " + this.time + " / executed by team #" + this.team + "\n";
     }
 }

@@ -4,7 +4,6 @@ import ttsp.data.TTSPData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import static ttsp.InstanceReader.instanceReader;
 
@@ -77,10 +76,10 @@ public class Solver {
             b[i]= model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, String.format("b_%s", i));
         }
 
-        GRBVar C = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, String.format("C"));
-        GRBVar C1 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, String.format("C1"));
-        GRBVar C2 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, String.format("C2"));
-        GRBVar C3 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, String.format("C3"));
+        GRBVar C = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, "C");
+        GRBVar C1 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, "C1");
+        GRBVar C2 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, "C2");
+        GRBVar C3 = model.addVar(0.0, maxEndTime, 0.0, GRB.CONTINUOUS, "C3");
 
 
         // Fonction objectif (1)
@@ -99,7 +98,7 @@ public class Solver {
                 for (int g = 0; g < data.nbTechs(); g++) {
                     expr.addTerm(1.0, x[t][g][k]);
                 }
-                model.addConstr(expr, GRB.EQUAL, 1.0, String.format("Constraint 2"));
+                model.addConstr(expr, GRB.EQUAL, 1.0, "Constraint 2");
             }
         }
         // Contrainte (3)
@@ -107,7 +106,7 @@ public class Solver {
             for (int k : data.technicians()[t].unavailability()){
                 GRBLinExpr expr = new GRBLinExpr();
                 expr.addTerm(1, x[t][0][k-1]);
-                model.addConstr(expr, GRB.EQUAL, 1.0, String.format("Constraint 3"));
+                model.addConstr(expr, GRB.EQUAL, 1.0,"Constraint 3");
             }
         }
 
@@ -117,14 +116,13 @@ public class Solver {
             for (int k = 0; k < maxDay; k++) {
                 GRBLinExpr expr = new GRBLinExpr();
                 expr.addTerm(1, y[i][0][k]);
-                model.addConstr(expr, GRB.EQUAL, 0, String.format("Constraint 3 bis"));
+                model.addConstr(expr, GRB.EQUAL, 0,"Constraint 3 bis");
             }
         }
 
-        // Contrainte (3bisbis)
+        // Contrainte (3bis-bis)
         // Si aucune intervention est réalisée sur un jour k donné,
         // Alors tous les techniciens sont dans l'équipe 0
-
         for (int k = 0; k < data.nbInterventions(); k++) {
             GRBLinExpr expr = new GRBLinExpr();
             for (int t = 0; t < data.nbTechs(); t++) {
@@ -135,7 +133,7 @@ public class Solver {
                     expr.addTerm(data.nbTechs(), y[i][g][k]);
                 }
             }
-            model.addConstr(expr, GRB.GREATER_EQUAL, data.nbTechs(), String.format("Constraint 3 bisbis"));
+            model.addConstr(expr, GRB.GREATER_EQUAL, data.nbTechs(), "Constraint 3 bis-bis");
         }
 
         // Contrainte (4)
@@ -149,7 +147,7 @@ public class Solver {
                                 expr.addTerm(data.technicians()[t].isTechnicianQualified(d,l) ? 1 : 0, x[t][g][k]);
                             }
                             expr.addTerm(-data.interventions()[i].domains()[d][l], y[i][g][k]);
-                            model.addConstr(expr, GRB.GREATER_EQUAL, 0, String.format("Constraint 4"));
+                            model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 4");
                         }
                     }
 
@@ -166,7 +164,7 @@ public class Solver {
                 }
             }
             expr.addTerm(-1, b[i]);
-            model.addConstr(0, GRB.GREATER_EQUAL, expr, String.format("Constraint 5"));
+            model.addConstr(0, GRB.GREATER_EQUAL, expr,"Constraint 5");
         }
 
         // Contrainte (6)
@@ -183,7 +181,7 @@ public class Solver {
                 }
             }
             expr.addTerm(-1, b[i]);
-            model.addConstr(0, GRB.LESS_EQUAL, expr, String.format("Constraint 6"));
+            model.addConstr(0, GRB.LESS_EQUAL, expr,"Constraint 6");
         }
 
         // Contrainte (7)
@@ -194,7 +192,7 @@ public class Solver {
                     expr.addTerm(1, b[i]);
                     expr.addTerm(-1, b[j]);
                     expr.addTerm(maxEndTime, u[i][j]);
-                    model.addConstr(expr, GRB.LESS_EQUAL, -data.interventions()[i].duration() + maxEndTime, String.format("Constraint 7"));
+                    model.addConstr(expr, GRB.LESS_EQUAL, -data.interventions()[i].duration() + maxEndTime,"Constraint 7");
                 }
             }
         }
@@ -210,7 +208,7 @@ public class Solver {
                             expr.addTerm(1, u[j][i]);
                             expr.addTerm(-1, y[i][g][k]);
                             expr.addTerm(-1, y[j][g][k]);
-                            model.addConstr(expr, GRB.GREATER_EQUAL, -1, String.format("Constraint 8"));
+                            model.addConstr(expr, GRB.GREATER_EQUAL, -1,"Constraint 8");
                         }
                     }
                 }
@@ -226,7 +224,7 @@ public class Solver {
                 }
             }
             expr.addTerm(1, o[i]);
-            model.addConstr(expr, GRB.EQUAL, 1, String.format("Constraint 9"));
+            model.addConstr(expr, GRB.EQUAL, 1,"Constraint 9");
         }
 
         // Contrainte (10)
@@ -236,7 +234,7 @@ public class Solver {
                 expr.addTerm(1, b[j-1]);
                 expr.addTerm(-1, b[i]);
                 expr.addTerm(-maxEndTime, o[i]);
-                model.addConstr(expr, GRB.LESS_EQUAL, -data.interventions()[j-1].duration(), String.format("Constraint 10"));
+                model.addConstr(expr, GRB.LESS_EQUAL, -data.interventions()[j-1].duration(),"Constraint 10");
             }
         }
 
@@ -246,7 +244,7 @@ public class Solver {
                 GRBLinExpr expr = new GRBLinExpr();
                 expr.addTerm(1, o[j]);
                 expr.addTerm(-1, o[i]);
-                model.addConstr(expr, GRB.LESS_EQUAL, 0, String.format("Constraint 11"));
+                model.addConstr(expr, GRB.LESS_EQUAL, 0,"Constraint 11");
             }
         }
 
@@ -255,7 +253,7 @@ public class Solver {
         for (int i = 0; i < data.nbInterventions(); i++) {
             expr12.addTerm(data.interventions()[i].cost(), o[i]);
         }
-        model.addConstr(expr12, GRB.LESS_EQUAL, data.budget(), String.format("Constraint 12"));
+        model.addConstr(expr12, GRB.LESS_EQUAL, data.budget(),"Constraint 12");
 
         // Contrainte (13)
         for (int i = 0; i < data.nbInterventions(); i++) {
@@ -267,7 +265,7 @@ public class Solver {
                     expr.addTerm(-data.interventions()[i].duration(), y[i][g][k]);
                 }
             }
-            model.addConstr(expr, GRB.GREATER_EQUAL, 0, String.format("Constraint 13"));
+            model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 13");
         }
 
         // Contrainte (14)
@@ -281,7 +279,7 @@ public class Solver {
                         expr.addTerm(-data.interventions()[i].duration(), y[i][g][k]);
                     }
                 }
-                model.addConstr(expr, GRB.GREATER_EQUAL, 0, String.format("Constraint 14"));
+                model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 14");
             }
         }
 
@@ -296,7 +294,7 @@ public class Solver {
                         expr.addTerm(-data.interventions()[i].duration(), y[i][g][k]);
                     }
                 }
-                model.addConstr(expr, GRB.GREATER_EQUAL, 0, String.format("Constraint 15"));
+                model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 15");
             }
         }
 
@@ -311,14 +309,14 @@ public class Solver {
                         expr.addTerm(-data.interventions()[i].duration(), y[i][g][k]);
                     }
                 }
-                model.addConstr(expr, GRB.GREATER_EQUAL, 0, String.format("Constraint 16"));
+                model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 16");
             }
         }
 
         model.optimize();
 
         if (model.get(IntAttr.SolCount) > 0) {
-            System.out.println("Succes! (Status: " + model.get(GRB.IntAttr.Status) + ")");
+            System.out.println("Success! (Status: " + model.get(GRB.IntAttr.Status) + ")");
             System.out.println("Runtime : " + Math.round(model.get(DoubleAttr.Runtime) * 1000) / 1000.0 + " seconds");
             System.out.println("--> Printing results ");
             System.out.println("Objective value = " + Math.round((float)model.get(DoubleAttr.ObjVal)));
@@ -356,9 +354,7 @@ public class Solver {
             bCopy[i] = Math.round((float)b[i].get(DoubleAttr.X));
         }
 
-        TTSPSolution solution = new TTSPSolution(data, xCopy, yCopy, oCopy, bCopy);
-        solution.print();
-        return solution;
+        return new TTSPSolution(data, xCopy, yCopy, oCopy, bCopy);
     }
 
     public static String usage(){
@@ -375,10 +371,12 @@ public class Solver {
         File techListFile = new File(args[0] + "/tech_list");
 
         TTSPData data = instanceReader(instanceFile, intervListFile, techListFile);
+        System.out.println(data);
         TTSPSolution sol = solver(data, Integer.parseInt(args[1]));
         if (sol == null){
             System.out.println("Solver couldn't find a solution within the time limit");
         }else{
+            System.out.println(sol);
             System.out.println("Checking solution...");
             boolean check = Checker.check(data, sol);
             if (check){
@@ -387,6 +385,5 @@ public class Solver {
                 System.out.println("Solution is not feasible");
             }
         }
-
     }
 }

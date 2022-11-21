@@ -34,29 +34,28 @@ public record TTSPData(String name, int nbDomains, int nbLevels, int nbTechs, in
         return false;
     }
 
-    public void print() {
+    @Override
+    public String toString(){
+        StringBuilder s = new StringBuilder();
+        s.append("///////////// Instance ").append(this.name).append(" ////////////").append("\n");
+        s.append("#Interventions = ").append(this.nbInterventions).append("\n");
+        s.append("#Technicians = ").append(this.nbTechs).append("\n");
+        s.append("#Domains / #Levels = ").append(this.nbDomains).append(" / ").append(this.nbLevels).append("\n");
+        s.append("Outsourcing budget = ").append(this.budget).append("\n \n");
 
-        System.out.println("///////////// Instance " + this.name + " ////////////");
-        System.out.println("#Interventions = " + this.nbInterventions);
-        System.out.println("#Technicians = " + this.nbTechs);
-        System.out.println("#Domains / #Levels = " + this.nbDomains + " / " + this.nbLevels);
-        System.out.println("Outsourcing budget = " + this.budget);
-        System.out.println();
-
-        System.out.println("----------------------------------");
-        System.out.println("--------- INTERVENTIONS ----------");
-        System.out.println("----------------------------------");
+        s.append("----------------------------------\n");
+        s.append("--------- INTERVENTIONS ----------\n");
+        s.append("----------------------------------\n");
         for (Intervention i : this.interventions) {
-            i.printInfo();
+            s.append(i);
         }
-        System.out.println();
 
-        System.out.println("----------------------------------");
-        System.out.println("---------- TECHNICIANS -----------");
-        System.out.println("----------------------------------");
+        s.append("\n----------------------------------\n");
+        s.append("---------- TECHNICIANS -----------\n");
+        s.append("----------------------------------\n");
         for (Technician t : this.technicians) {
-            t.print();
+            s.append(t);
         }
-        System.out.println();
+        return s.toString();
     }
 }

@@ -85,9 +85,7 @@ public class InstanceReader {
         Intervention[] interventions = readInterventions(intervListFile, nbInterventions, nbLevels, nbDomains);
         Technician[] technicians = readTechnicians(techListFile, nbTechs, nbDomains);
 
-        TTSPData ttspData = new TTSPData(name, nbDomains, nbLevels, nbTechs, nbInterventions, budget, interventions, technicians);
-        ttspData.print();
-        return ttspData;
+        return new TTSPData(name, nbDomains, nbLevels, nbTechs, nbInterventions, budget, interventions, technicians);
     }
 
     public static String usage(){
@@ -103,8 +101,8 @@ public class InstanceReader {
         File intervListFile = new File(args[0] + "/interv_list");
         File techListFile = new File(args[0] + "/tech_list");
 
-        instanceReader(instanceFile, intervListFile, techListFile);
-
+        TTSPData data = instanceReader(instanceFile, intervListFile, techListFile);
+        System.out.println(data);
     }
 
 }

@@ -61,9 +61,7 @@ public class SolutionReader {
     public static TTSPSolution solutionReader(File intervDatesFile, File techTeamsFile) throws FileNotFoundException {
         InterventionResult[] interventionsResults = readInterventionsResults(intervDatesFile);
         Team[] teams = readTeamsSchedule(techTeamsFile);
-        TTSPSolution ttspSolution = new TTSPSolution(interventionsResults, teams, teams[teams.length-1].getDay());
-        ttspSolution.print();
-        return ttspSolution;
+        return new TTSPSolution(interventionsResults, teams, teams[teams.length-1].day());
     }
 
     public static String usage(){
@@ -78,6 +76,7 @@ public class SolutionReader {
         File intervDatesFile = new File(args[0] + "/interv_dates");
         File techTeamsFile = new File(args[0] + "/tech_teams");
 
-        solutionReader(intervDatesFile, techTeamsFile);
+        TTSPSolution solution = solutionReader(intervDatesFile, techTeamsFile);
+        System.out.println(solution);
     }
 }
