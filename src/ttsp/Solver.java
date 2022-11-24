@@ -144,7 +144,7 @@ public class Solver {
                         for (int k = 0; k < maxDay; k++) {
                             GRBLinExpr expr = new GRBLinExpr();
                             for (int t = 0; t < data.nbTechs(); t++) {
-                                expr.addTerm(data.technicians()[t].isTechnicianQualified(d,l) ? 1 : 0, x[t][g][k]);
+                                expr.addTerm(data.technicians()[t].isQualified(d,l) ? 1 : 0, x[t][g][k]);
                             }
                             expr.addTerm(-data.interventions()[i].domains()[d][l], y[i][g][k]);
                             model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 4");

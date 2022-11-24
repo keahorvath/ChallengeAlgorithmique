@@ -6,8 +6,17 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) {
         return this.domainsLevels[domain - 1];
     }
 
-    public boolean isTechnicianQualified(int domain, int level){
+    public boolean isQualified(int domain, int level){
         return this.domainsLevels[domain] > level;
+    }
+
+    public boolean isAvailable(int day){
+        for(int k : unavailability) {
+            if (k == day){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

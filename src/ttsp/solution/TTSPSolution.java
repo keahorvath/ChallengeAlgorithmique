@@ -105,6 +105,7 @@ public class TTSPSolution {
         }
         return false;
     }
+
     public Team[] getTeamsOfDay(int day){
         ArrayList<Team> teams = new ArrayList<>();
         for (Team t : this.teams){
