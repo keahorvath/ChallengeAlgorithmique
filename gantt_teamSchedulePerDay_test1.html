@@ -1,0 +1,152 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>TTSP Solution : Schedule for each technician</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			}
+		</style>
+
+		<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+		<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+		<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+		<script>
+			am4core.ready(function() {
+			am4core.useTheme(am4themes_animated);
+
+			var dataDay0 = [
+				{
+					team_number: 1,
+					team_tech: "0 2",
+					day: 1,
+					intervention : 4,
+					startTime: 60,
+					fromDate: 60,
+					toDate: 75,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 1,
+					team_tech: "0 2",
+					day: 1,
+					intervention : 5,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 60,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "3",
+					day: 1,
+					intervention : 1,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 60,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "3",
+					day: 1,
+					intervention : 2,
+					startTime: 60,
+					fromDate: 60,
+					toDate: 120,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 3,
+					team_tech: "4",
+					day: 1,
+					intervention : 3,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 15,
+					color: "#FF0000"
+				}
+			];
+			// Create series
+			function createChartAndSeriesAndAxis(chartdiv, chartTitle, axisMin, axisMax, data) {
+				// Create chart instance
+				var chart = am4core.create(chartdiv, am4charts.XYChart);
+				chart.data = data;
+
+				var title = chart.titles.create();
+				title.text = chartTitle;
+				title.fontSize = 25;
+				title.marginBottom = 30;
+
+				// Create axes
+				var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+				categoryAxis.dataFields.category = "team_number";
+				categoryAxis.renderer.grid.template.location = 0;
+				categoryAxis.renderer.inversed = true;
+				categoryAxis.title.text = "Teams";
+				categoryAxis.title.fontWeight = "bold";
+				categoryAxis.renderer.labels.template.fontSize = 14;
+
+				var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+				valueAxis.min = axisMin;
+				valueAxis.max = axisMax;
+				valueAxis.strictMinMax = true;
+				valueAxis.title.text = "Time";
+				valueAxis.title.fontWeight = "bold";
+				valueAxis.renderer.labels.template.fontSize = 14;
+
+				var series = chart.series.push(new am4charts.ColumnSeries());
+				series.columns.template.width = am4core.percent(80);
+				series.columns.template.tooltipText = "[bold]Intervention #{intervention} :[/] from time {startTime} on day {day} (cumulative time: from {openValueX} to {valueX}) \n[bold]Team #{team_number} :[/] {team_tech}";
+				series.dataFields.openValueX = "fromDate";
+				series.dataFields.valueX = "toDate";
+				series.dataFields.categoryY = "team_number";
+				series.columns.template.propertyFields.stroke = "black";
+				series.columns.template.propertyFields.fill = "color";
+				series.columns.template.strokeOpacity = 100;
+				series.xAxis = valueAxis;
+
+			var label = series.columns.template.createChild(am4core.Label);
+			label.text = "{intervention}";
+			label.align = "center";
+			label.valign = "middle";
+			label.fill = "black";
+
+			var legend = new am4charts.Legend();
+			legend.parent = chart.chartContainer;
+			legend.y = am4core.percent(100);
+			legend.position = "bottom";
+			legend.contentAlign = "center";
+			legend.fontSize = 14;
+			legend.padding(10, 15, 10, 15);
+			legend.data = [{
+				"name": "Priority 1",
+				"fill":"#FF0000"
+			}, {
+				"name": "Priority 2",
+				"fill": "#FFD700"
+			}, {
+				"name": "Priority 3",
+				"fill": "#90EE90"
+			}, {
+				"name": "Priority >3",
+				"fill": "#33b2ff"
+			}
+];
+			legend.itemContainers.template.clickable = false;
+			legend.itemContainers.template.focusable = false;
+			chart.scrollbarX = new am4core.Scrollbar();
+
+
+			return series;
+			}
+
+			createChartAndSeriesAndAxis("chartdiv0","[bold]Day 1[/]", 0, 120, dataDay0);
+			}); // end am4core.ready()
+		</script>
+	</head>
+
+	<body>
+		<div id="chartdiv0" style="height: 380px;"></div>
+	</body>
+</html>
