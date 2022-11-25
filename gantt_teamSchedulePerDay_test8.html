@@ -1,0 +1,1126 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>TTSP Solution : Schedule for each technician</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			}
+		</style>
+
+		<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+		<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+		<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+		<script>
+			am4core.ready(function() {
+			am4core.useTheme(am4themes_animated);
+
+			var dataDay0 = [
+				{
+					team_number: 1,
+					team_tech: "5 6 14 8 16",
+					day: 1,
+					intervention : 9,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 120,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "2 9 10 15",
+					day: 1,
+					intervention : 93,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 120,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "0 4 13 18 7",
+					day: 1,
+					intervention : 20,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 120,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "11 12 19",
+					day: 1,
+					intervention : 69,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 120,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "3 17",
+					day: 1,
+					intervention : 16,
+					startTime: 0,
+					fromDate: 0,
+					toDate: 120,
+					color: "#FF0000"
+				}
+			];
+			var dataDay1 = [
+				{
+					team_number: 1,
+					team_tech: "5",
+					day: 2,
+					intervention : 64,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14",
+					day: 2,
+					intervention : 7,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "16",
+					day: 2,
+					intervention : 11,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "2",
+					day: 2,
+					intervention : 66,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "9",
+					day: 2,
+					intervention : 92,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "15 0 1 4 13",
+					day: 2,
+					intervention : 85,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 180,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "15 0 1 4 13",
+					day: 2,
+					intervention : 98,
+					startTime: 60,
+					fromDate: 180,
+					toDate: 240,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "18 7 19 3 17",
+					day: 2,
+					intervention : 4,
+					startTime: 0,
+					fromDate: 120,
+					toDate: 180,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "18 7 19 3 17",
+					day: 2,
+					intervention : 19,
+					startTime: 60,
+					fromDate: 180,
+					toDate: 240,
+					color: "#FF0000"
+				}
+			];
+			var dataDay2 = [
+				{
+					team_number: 1,
+					team_tech: "5 6 14 8 2 10",
+					day: 3,
+					intervention : 18,
+					startTime: 60,
+					fromDate: 300,
+					toDate: 360,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 1,
+					team_tech: "5 6 14 8 2 10",
+					day: 3,
+					intervention : 82,
+					startTime: 0,
+					fromDate: 240,
+					toDate: 300,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "15 0 1 4 13 18 7 11 12",
+					day: 3,
+					intervention : 8,
+					startTime: 60,
+					fromDate: 300,
+					toDate: 360,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "15 0 1 4 13 18 7 11 12",
+					day: 3,
+					intervention : 78,
+					startTime: 0,
+					fromDate: 240,
+					toDate: 300,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "19 3",
+					day: 3,
+					intervention : 36,
+					startTime: 60,
+					fromDate: 300,
+					toDate: 360,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "19 3",
+					day: 3,
+					intervention : 47,
+					startTime: 0,
+					fromDate: 240,
+					toDate: 300,
+					color: "#FF0000"
+				}
+			];
+			var dataDay3 = [
+				{
+					team_number: 1,
+					team_tech: "5",
+					day: 4,
+					intervention : 71,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 1,
+					team_tech: "5",
+					day: 4,
+					intervention : 41,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 1,
+					team_tech: "5",
+					day: 4,
+					intervention : 48,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 1,
+					team_tech: "5",
+					day: 4,
+					intervention : 38,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 1,
+					team_tech: "5",
+					day: 4,
+					intervention : 37,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "14",
+					day: 4,
+					intervention : 95,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "14",
+					day: 4,
+					intervention : 10,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "14",
+					day: 4,
+					intervention : 91,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "14",
+					day: 4,
+					intervention : 90,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "14",
+					day: 4,
+					intervention : 87,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "8",
+					day: 4,
+					intervention : 45,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "8",
+					day: 4,
+					intervention : 35,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "8",
+					day: 4,
+					intervention : 28,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "8",
+					day: 4,
+					intervention : 61,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "8",
+					day: 4,
+					intervention : 79,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "16",
+					day: 4,
+					intervention : 55,
+					startTime: 56,
+					fromDate: 416,
+					toDate: 431,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "16",
+					day: 4,
+					intervention : 67,
+					startTime: 71,
+					fromDate: 431,
+					toDate: 446,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "16",
+					day: 4,
+					intervention : 43,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 416,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "16",
+					day: 4,
+					intervention : 24,
+					startTime: 101,
+					fromDate: 461,
+					toDate: 476,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 4,
+					team_tech: "16",
+					day: 4,
+					intervention : 15,
+					startTime: 86,
+					fromDate: 446,
+					toDate: 461,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 44,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 40,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 375,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 89,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 1,
+					startTime: 15,
+					fromDate: 375,
+					toDate: 390,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 84,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 60,
+					startTime: 45,
+					fromDate: 405,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 5,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "2 9 10 15 0",
+					day: 4,
+					intervention : 2,
+					startTime: 30,
+					fromDate: 390,
+					toDate: 405,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 88,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 80,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 51,
+					startTime: 45,
+					fromDate: 405,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 70,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 63,
+					startTime: 30,
+					fromDate: 390,
+					toDate: 405,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 56,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 23,
+					startTime: 15,
+					fromDate: 375,
+					toDate: 390,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 6,
+					team_tech: "1 4 13 11 19",
+					day: 4,
+					intervention : 13,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 375,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 65,
+					startTime: 105,
+					fromDate: 465,
+					toDate: 480,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 76,
+					startTime: 0,
+					fromDate: 360,
+					toDate: 375,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 54,
+					startTime: 90,
+					fromDate: 450,
+					toDate: 465,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 49,
+					startTime: 75,
+					fromDate: 435,
+					toDate: 450,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 46,
+					startTime: 60,
+					fromDate: 420,
+					toDate: 435,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 33,
+					startTime: 45,
+					fromDate: 405,
+					toDate: 420,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 6,
+					startTime: 30,
+					fromDate: 390,
+					toDate: 405,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 7,
+					team_tech: "3 17",
+					day: 4,
+					intervention : 97,
+					startTime: 15,
+					fromDate: 375,
+					toDate: 390,
+					color: "#FF0000"
+				}
+			];
+			var dataDay4 = [
+				{
+					team_number: 1,
+					team_tech: "5",
+					day: 5,
+					intervention : 42,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 600,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 99,
+					startTime: 60,
+					fromDate: 540,
+					toDate: 555,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 96,
+					startTime: 45,
+					fromDate: 525,
+					toDate: 540,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 72,
+					startTime: 75,
+					fromDate: 555,
+					toDate: 563,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 62,
+					startTime: 15,
+					fromDate: 495,
+					toDate: 510,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 32,
+					startTime: 98,
+					fromDate: 578,
+					toDate: 593,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 39,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 495,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 57,
+					startTime: 83,
+					fromDate: 563,
+					toDate: 578,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 2,
+					team_tech: "8 16 2 9 10 15 0 1 13 18",
+					day: 5,
+					intervention : 53,
+					startTime: 30,
+					fromDate: 510,
+					toDate: 525,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 52,
+					startTime: 75,
+					fromDate: 555,
+					toDate: 570,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 73,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 495,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 50,
+					startTime: 60,
+					fromDate: 540,
+					toDate: 555,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 26,
+					startTime: 15,
+					fromDate: 495,
+					toDate: 510,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 21,
+					startTime: 45,
+					fromDate: 525,
+					toDate: 540,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 3,
+					team_tech: "7",
+					day: 5,
+					intervention : 17,
+					startTime: 30,
+					fromDate: 510,
+					toDate: 525,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 4,
+					team_tech: "11",
+					day: 5,
+					intervention : 3,
+					startTime: 15,
+					fromDate: 495,
+					toDate: 555,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 4,
+					team_tech: "11",
+					day: 5,
+					intervention : 94,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 495,
+					color: "#FF0000"
+				}
+				,{
+					team_number: 5,
+					team_tech: "19",
+					day: 5,
+					intervention : 12,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 600,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 6,
+					team_tech: "3",
+					day: 5,
+					intervention : 27,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 600,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 7,
+					team_tech: "17",
+					day: 5,
+					intervention : 83,
+					startTime: 60,
+					fromDate: 540,
+					toDate: 555,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 7,
+					team_tech: "17",
+					day: 5,
+					intervention : 86,
+					startTime: 0,
+					fromDate: 480,
+					toDate: 540,
+					color: "#FFD700"
+				}
+			];
+			var dataDay5 = [
+				{
+					team_number: 1,
+					team_tech: "5",
+					day: 6,
+					intervention : 100,
+					startTime: 0,
+					fromDate: 600,
+					toDate: 720,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14 8 2 9 10 15 0 1 4 13 18 7 12",
+					day: 6,
+					intervention : 14,
+					startTime: 0,
+					fromDate: 600,
+					toDate: 660,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14 8 2 9 10 15 0 1 4 13 18 7 12",
+					day: 6,
+					intervention : 31,
+					startTime: 90,
+					fromDate: 690,
+					toDate: 705,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14 8 2 9 10 15 0 1 4 13 18 7 12",
+					day: 6,
+					intervention : 34,
+					startTime: 75,
+					fromDate: 675,
+					toDate: 690,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14 8 2 9 10 15 0 1 4 13 18 7 12",
+					day: 6,
+					intervention : 74,
+					startTime: 60,
+					fromDate: 660,
+					toDate: 675,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6 14 8 2 9 10 15 0 1 4 13 18 7 12",
+					day: 6,
+					intervention : 81,
+					startTime: 105,
+					fromDate: 705,
+					toDate: 720,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 3,
+					team_tech: "19",
+					day: 6,
+					intervention : 29,
+					startTime: 0,
+					fromDate: 600,
+					toDate: 660,
+					color: "#FFD700"
+				}
+				,{
+					team_number: 3,
+					team_tech: "19",
+					day: 6,
+					intervention : 77,
+					startTime: 60,
+					fromDate: 660,
+					toDate: 720,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 4,
+					team_tech: "3",
+					day: 6,
+					intervention : 58,
+					startTime: 0,
+					fromDate: 600,
+					toDate: 615,
+					color: "#FFD700"
+				}
+			];
+			var dataDay6 = [
+				{
+					team_number: 1,
+					team_tech: "5",
+					day: 7,
+					intervention : 25,
+					startTime: 0,
+					fromDate: 720,
+					toDate: 840,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 2,
+					team_tech: "6",
+					day: 7,
+					intervention : 22,
+					startTime: 0,
+					fromDate: 720,
+					toDate: 840,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 3,
+					team_tech: "14 8 16 2 9",
+					day: 7,
+					intervention : 30,
+					startTime: 60,
+					fromDate: 780,
+					toDate: 795,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 3,
+					team_tech: "14 8 16 2 9",
+					day: 7,
+					intervention : 68,
+					startTime: 0,
+					fromDate: 720,
+					toDate: 780,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 4,
+					team_tech: "10 0 1",
+					day: 7,
+					intervention : 75,
+					startTime: 0,
+					fromDate: 720,
+					toDate: 735,
+					color: "#90EE90"
+				}
+				,{
+					team_number: 5,
+					team_tech: "4 13 18",
+					day: 7,
+					intervention : 59,
+					startTime: 0,
+					fromDate: 720,
+					toDate: 735,
+					color: "#90EE90"
+				}
+			];
+			// Create series
+			function createChartAndSeriesAndAxis(chartdiv, chartTitle, axisMin, axisMax, data) {
+				// Create chart instance
+				var chart = am4core.create(chartdiv, am4charts.XYChart);
+				chart.data = data;
+
+				var title = chart.titles.create();
+				title.text = chartTitle;
+				title.fontSize = 25;
+				title.marginBottom = 30;
+
+				// Create axes
+				var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+				categoryAxis.dataFields.category = "team_number";
+				categoryAxis.renderer.grid.template.location = 0;
+				categoryAxis.renderer.inversed = true;
+				categoryAxis.title.text = "Teams";
+				categoryAxis.title.fontWeight = "bold";
+				categoryAxis.renderer.labels.template.fontSize = 14;
+
+				var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+				valueAxis.min = axisMin;
+				valueAxis.max = axisMax;
+				valueAxis.strictMinMax = true;
+				valueAxis.title.text = "Time";
+				valueAxis.title.fontWeight = "bold";
+				valueAxis.renderer.labels.template.fontSize = 14;
+
+				var series = chart.series.push(new am4charts.ColumnSeries());
+				series.columns.template.width = am4core.percent(80);
+				series.columns.template.tooltipText = "[bold]Intervention #{intervention} :[/] from time {startTime} on day {day} (cumulative time: from {openValueX} to {valueX}) \n[bold]Team #{team_number} :[/] {team_tech}";
+				series.dataFields.openValueX = "fromDate";
+				series.dataFields.valueX = "toDate";
+				series.dataFields.categoryY = "team_number";
+				series.columns.template.propertyFields.stroke = "black";
+				series.columns.template.propertyFields.fill = "color";
+				series.columns.template.strokeOpacity = 100;
+				series.xAxis = valueAxis;
+
+			var label = series.columns.template.createChild(am4core.Label);
+			label.text = "{intervention}";
+			label.align = "center";
+			label.valign = "middle";
+			label.fill = "black";
+
+			var legend = new am4charts.Legend();
+			legend.parent = chart.chartContainer;
+			legend.y = am4core.percent(100);
+			legend.position = "bottom";
+			legend.contentAlign = "center";
+			legend.fontSize = 14;
+			legend.padding(10, 15, 10, 15);
+			legend.data = [{
+				"name": "Priority 1",
+				"fill":"#FF0000"
+			}, {
+				"name": "Priority 2",
+				"fill": "#FFD700"
+			}, {
+				"name": "Priority 3",
+				"fill": "#90EE90"
+			}, {
+				"name": "Priority >3",
+				"fill": "#33b2ff"
+			}
+];
+			legend.itemContainers.template.clickable = false;
+			legend.itemContainers.template.focusable = false;
+			chart.scrollbarX = new am4core.Scrollbar();
+
+
+			return series;
+			}
+
+			createChartAndSeriesAndAxis("chartdiv0","[bold]Day 1[/]", 0, 120, dataDay0);
+			createChartAndSeriesAndAxis("chartdiv1","[bold]Day 2[/]", 120, 240, dataDay1);
+			createChartAndSeriesAndAxis("chartdiv2","[bold]Day 3[/]", 240, 360, dataDay2);
+			createChartAndSeriesAndAxis("chartdiv3","[bold]Day 4[/]", 360, 480, dataDay3);
+			createChartAndSeriesAndAxis("chartdiv4","[bold]Day 5[/]", 480, 600, dataDay4);
+			createChartAndSeriesAndAxis("chartdiv5","[bold]Day 6[/]", 600, 720, dataDay5);
+			createChartAndSeriesAndAxis("chartdiv6","[bold]Day 7[/]", 720, 840, dataDay6);
+			}); // end am4core.ready()
+		</script>
+	</head>
+
+	<body>
+		<div id="chartdiv0" style="height: 470px;"></div>
+		<div id="chartdiv1" style="height: 560px;"></div>
+		<div id="chartdiv2" style="height: 380px;"></div>
+		<div id="chartdiv3" style="height: 560px;"></div>
+		<div id="chartdiv4" style="height: 560px;"></div>
+		<div id="chartdiv5" style="height: 425px;"></div>
+		<div id="chartdiv6" style="height: 470px;"></div>
+	</body>
+</html>
