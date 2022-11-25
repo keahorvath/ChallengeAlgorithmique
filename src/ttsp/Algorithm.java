@@ -10,6 +10,7 @@ import ttsp.solution.Team;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,19 +34,19 @@ public class Algorithm {
             if (costOfInterventions(interventionsToDo) <= remainingBudget){
                 for (Intervention i : interventionsToDo){
                     outsourcedInterventions.add(i.number());
-                    interventionsToDo.remove(i);
                 }
+                interventionsToDo.clear();
                 continue;
             }
 
             //Reset teams and available technicians
             ArrayList<Team> teamsOfCurrentDay = new ArrayList<>();
+            ArrayList<Integer> stopTimeOfTeams = new ArrayList<>();
             ArrayList<Technician> availableTechnicians = getAndSortTechnicians(currentDay, data);
 
             //Create the teams of currentDay
-            //TODO Issue: infinite loop when bestTeam == null -> in getNextDoableIntervention check if i can be done with the remaining technicians
             while(availableTechnicians.size() != 0 && interventionsToDo.size() != 0){
-                Intervention currentIntervention = getNextDoableIntervention(120 * (currentDay - 1), data, interventionsToDo, interventionResults);
+                Intervention currentIntervention = getNextDoableIntervention(120 * (currentDay - 1), data, interventionsToDo, interventionResults, availableTechnicians);
                 if (currentIntervention == null){
                     //It means that no more interventions can be done on the current day
                     break;
@@ -53,18 +54,40 @@ public class Algorithm {
                 Team bestTeam = getBestTeam(currentIntervention, availableTechnicians, currentDay, teamsOfCurrentDay.size()+1);
                 if (bestTeam == null){
                     //It means that the current intervention can't be done with the remaining technicians
+                    //Should never happen if code is correct
+                    System.err.println("No team found for intervention");
                     continue;
                 }
                 for (int t : bestTeam.technicians()){
                     availableTechnicians.remove(data.getTechnicianFromNumber(t));
                 }
                 teamsOfCurrentDay.add(bestTeam);
+                stopTimeOfTeams.add(currentIntervention.duration());
                 interventionResults.add(new InterventionResult(currentIntervention.number(), teamsOfCurrentDay.size(), currentDay, 0));
                 interventionsToDo.remove(currentIntervention);
             }
+
+            //Do as many interventions as possible with current teams
+            for (Team g : teamsOfCurrentDay){
+                int currentStopTime = stopTimeOfTeams.get(g.teamNb()-1);
+                ArrayList<Technician> techniciansOfTeam = new ArrayList<>();
+                for (int t : g.technicians()){
+                    techniciansOfTeam.add(data.getTechnicianFromNumber(t));
+                }
+                Intervention currentIntervention = getNextDoableIntervention(120 * (currentDay - 1) + currentStopTime, data, interventionsToDo, interventionResults, techniciansOfTeam);
+                //While interventions can still be done by team
+                while (currentIntervention != null && currentStopTime != 120){
+                    interventionResults.add(new InterventionResult(currentIntervention.number(), g.teamNb(), currentDay, currentStopTime));
+                    interventionsToDo.remove(currentIntervention);
+                    currentStopTime += currentIntervention.duration();
+                    currentIntervention = getNextDoableIntervention(120 * (currentDay - 1) + currentStopTime, data, interventionsToDo, interventionResults, techniciansOfTeam);
+                }
+            }
+
             teams.add(getTeamZero(currentDay, data, availableTechnicians));
             teams.addAll(teamsOfCurrentDay);
             currentDay++;
+
 
         }
         InterventionResult[] interventionResultsCopy = new InterventionResult[interventionResults.size()];
@@ -78,11 +101,15 @@ public class Algorithm {
         return new TTSPSolution(interventionResultsCopy, teamsCopy, currentDay-1);
     }
 
-    //TODO: also compare by complexity (nb of domains needed)
+    //TODO: Compare by priority!! also compare by complexity/difficulty (nb of domains needed)
     public static ArrayList<Intervention> getAndSortInterventions(TTSPData data){
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
         Collections.sort(interventionsToDo);
+        System.out.println("Sorting:");
+        for (Intervention t : interventionsToDo){
+            System.out.println(t);
+        }
         return interventionsToDo;
     }
 
@@ -94,6 +121,7 @@ public class Algorithm {
             }
         }
         Collections.sort(availableTechnicians);
+
         return availableTechnicians;
     }
 
@@ -124,9 +152,13 @@ public class Algorithm {
 
     /**
      *Returns the next intervention that doesn't have any uncompleted predecessors
+     * and that is doable with the remaining available technicians
      */
-    public static Intervention getNextDoableIntervention(int currentTime, TTSPData data, ArrayList<Intervention> interventions, ArrayList<InterventionResult> results){
+    public static Intervention getNextDoableIntervention(int currentTime, TTSPData data, ArrayList<Intervention> interventions, ArrayList<InterventionResult> results, ArrayList<Technician> availableTechnicians){
         for (Intervention i : interventions){
+            if ((currentTime%120) + i.duration() > 120){
+                continue;
+            }
             boolean arePredsDone = true;
             for (int j : i.preds()){
                 Intervention pred = data.getInterventionFromNumber(j);
@@ -142,7 +174,10 @@ public class Algorithm {
                     }
                 }
             }
-            if (arePredsDone){
+            if (!arePredsDone){
+                continue;
+            }
+            if (i.isDoable(availableTechnicians)){
                 return i;
             }
         }
@@ -151,11 +186,15 @@ public class Algorithm {
 
     /**
      * TODO
-     * Removes the used technicians
      *Returns the team with the least amount of technicians and least amount of overqualified technicians
      */
     public static Team getBestTeam(Intervention intervention, ArrayList<Technician> technicians, int day, int teamNb){
-        int[][] domains = intervention.domains();
+        int[][] domains = new int[intervention.domains().length][intervention.domains()[0].length];
+        for (int d = 0; d < domains.length; d++) {
+            for (int l = 0; l < domains[0].length; l++) {
+                domains[d][l] = intervention.domains()[d][l];
+            }
+        }
         int[][] zeros = new int[domains.length][domains[0].length];
         ArrayList<Technician> techniciansCopy = new ArrayList<>(technicians);
         ArrayList<Technician> techniciansUsed = new ArrayList<>();
@@ -182,6 +221,7 @@ public class Algorithm {
         return new Team(day, teamNb, techniciansUsedCopy);
     }
 
+    //public static getNextDoableInterventionByTeam()
     public static String usage(){
         return "usage: java -jar algorithm.jar absolutePathToFolder";
     }
@@ -203,6 +243,8 @@ public class Algorithm {
         boolean check = Checker.check(data, solution);
         if (check){
             System.out.println("Solution is feasible");
+            System.out.println("-> TOTAL COST = " + Evaluator.evaluate(data, solution));
+
         }else{
             System.out.println("Solution is not feasible");
         }
