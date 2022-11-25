@@ -1,6 +1,11 @@
 package ttsp.solution;
 
 import ttsp.data.TTSPData;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 public class TTSPSolution {
@@ -167,6 +172,36 @@ public class TTSPSolution {
             interventionsCompletedCopy[i] = interventionsCompleted.get(i);
         }
         return interventionsCompletedCopy;
+    }
+
+    public void export(String path) throws IOException {
+        File intervFile = new File(path + "/interv_dates");
+        StringBuilder string1 = new StringBuilder();
+        for (InterventionResult i : interventionsResults){
+            string1.append(i.number() + " " + i.day() + " " + i.time() + " " + i.team() + "\n");
+        }
+        FileWriter writer1 = new FileWriter(intervFile);
+        writer1.write(string1.toString());
+        writer1.close();
+
+        File techFile = new File(path + "/tech_teams");
+        StringBuilder string2 = new StringBuilder();
+        for (int k = 1; k < nbDays+1; k++) {
+            string2.append(k);
+            Team[] teams = getTeamsOfDay(k);
+            for (Team g : teams){
+                string2.append(" [ ");
+                for (int t : g.technicians()){
+                    string2.append(t + " ");
+                }
+                string2.append("]");
+            }
+            string2.append("\n");
+        }
+        FileWriter writer2 = new FileWriter(techFile);
+        writer2.write(string2.toString());
+        writer2.close();
+
     }
 
     @Override

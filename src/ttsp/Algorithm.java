@@ -10,6 +10,7 @@ import ttsp.solution.Team;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -226,7 +227,7 @@ public class Algorithm {
         return "usage: java -jar algorithm.jar absolutePathToFolder";
     }
 
-    public static void main(String[] args) throws FileNotFoundException, GRBException {
+    public static void main(String[] args) throws IOException, GRBException {
         if (args.length != 1){
             System.out.println(usage());
             System.exit(1);
@@ -244,7 +245,7 @@ public class Algorithm {
         if (check){
             System.out.println("Solution is feasible");
             System.out.println("-> TOTAL COST = " + Evaluator.evaluate(data, solution));
-
+            solution.export(args[0]);
         }else{
             System.out.println("Solution is not feasible");
         }

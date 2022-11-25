@@ -52,6 +52,7 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
     @Override
     public int compareTo(Intervention i){
         return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::duration, Comparator.reverseOrder())
                 .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
                 .thenComparing(Intervention::totalLevelsNeeded, Comparator.reverseOrder())
                 .compare(this, i);
