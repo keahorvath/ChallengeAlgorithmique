@@ -138,15 +138,15 @@ public class Solver {
 
         // Contrainte (4)
         for (int i = 0; i < data.nbInterventions(); i++) {
-            for (int d = 0; d < data.nbDomains(); d++) {
-                for (int l = 0; l < data.nbLevels(); l++) {
+            for (int d = 1; d < data.nbDomains()+1; d++) {
+                for (int l = 1; l < data.nbLevels()+1; l++) {
                     for (int g = 0; g < data.nbTechs(); g++) {
                         for (int k = 0; k < maxDay; k++) {
                             GRBLinExpr expr = new GRBLinExpr();
                             for (int t = 0; t < data.nbTechs(); t++) {
                                 expr.addTerm(data.technicians()[t].isQualified(d,l) ? 1 : 0, x[t][g][k]);
                             }
-                            expr.addTerm(-data.interventions()[i].domains()[d][l], y[i][g][k]);
+                            expr.addTerm(-data.interventions()[i].domains()[d-1][l-1], y[i][g][k]);
                             model.addConstr(expr, GRB.GREATER_EQUAL, 0,"Constraint 4");
                         }
                     }

@@ -1,6 +1,22 @@
 package ttsp.data;
 
-public record Intervention(int number, int duration, int[] preds, int prio, int cost, int[][] domains) {
+public record Intervention(int number, int duration, int[] preds, int prio, int cost, int[][] domains) implements Comparable<Intervention>{
+
+    public int minNbOfTechnicians(){
+        int maxNbPerDomain = 0;
+        for (int d = 0; d < domains.length; d++) {
+            for (int l = 0; l < domains[d].length; l++) {
+                if (domains[d][l] > maxNbPerDomain){
+                    maxNbPerDomain = domains[d][l];
+                }
+            }
+        }
+        return maxNbPerDomain;
+    }
+    @Override
+    public int compareTo(Intervention interventionToCompare){
+        return interventionToCompare.minNbOfTechnicians() - this.minNbOfTechnicians();
+    }
 
     @Override
     public String toString(){

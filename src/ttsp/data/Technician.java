@@ -1,13 +1,13 @@
 package ttsp.data;
 
-public record Technician(int name, int[] domainsLevels, int[] unavailability) {
+public record Technician(int name, int[] domainsLevels, int[] unavailability) implements Comparable<Technician>{
 
     public int getLevelInDomain(int domain) {
-        return this.domainsLevels[domain - 1];
+        return this.domainsLevels[domain-1];
     }
 
     public boolean isQualified(int domain, int level){
-        return this.domainsLevels[domain] > level;
+        return this.domainsLevels[domain-1] >= level;
     }
 
     public boolean isAvailable(int day){
@@ -17,6 +17,18 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) {
             }
         }
         return true;
+    }
+
+    public int sumOfLevels(){
+        int sum = 0;
+        for (int domainsLevel : domainsLevels) {
+            sum += domainsLevel;
+        }
+        return sum;
+    }
+    @Override
+    public int compareTo(Technician technicianToCompare){
+        return technicianToCompare.sumOfLevels() - this.sumOfLevels();
     }
 
     @Override
