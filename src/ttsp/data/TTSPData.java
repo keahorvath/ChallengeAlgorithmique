@@ -34,6 +34,7 @@ public record TTSPData(String name, int nbDomains, int nbLevels, int nbTechs, in
         return false;
     }
 
+
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();

@@ -6,6 +6,17 @@ import java.util.Comparator;
 
 public record Intervention(int number, int duration, int[] preds, int prio, int cost, int[][] domains) implements Comparable<Intervention>{
 
+    //To make sure we can't change the values of domains
+    public int[][] getDomains(){
+        int[][] domainsCopy = new int[domains.length][domains[0].length];
+        for (int i = 0; i < domains.length; i++) {
+            for (int j = 0; j < domains[0].length; j++) {
+                domainsCopy[i][j] = domains[i][j];
+            }
+        }
+        return domainsCopy;
+    }
+
     public int minNbOfTechnicians(){
         int maxNbPerDomain = 0;
         for (int d = 0; d < domains.length; d++) {
@@ -49,6 +60,51 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
         }
         return Arrays.deepEquals(domains, zeros);
     }
+
+    public int[][] getImprovedDomains(){
+        int[][] domainsImproved = getDomains();
+        for (int d = 0; d < domains.length; d++) {
+            int highestLevel = 0;
+            int value = 0;
+            for (int l = domains[0].length-1; l >= 1; l--){
+                if (domains[d][l] != 0){
+                    highestLevel = l;
+                    value = domains[d][l];
+                }
+            }
+            if (value == 0){
+                continue;
+            }
+            for (int l = highestLevel-1; l >= 0; l--) {
+                if (domainsImproved[d][l] <= highestLevel){
+                    domainsImproved[d][l] = 0;
+                }
+            }
+        }
+        return domainsImproved;
+    }
+
+    public void getImprovedDomains(int[][] domains){
+        for (int d = 0; d < domains.length; d++) {
+            int highestLevel = 0;
+            int value = 0;
+            for (int l = domains[0].length-1; l >= 1; l--){
+                if (domains[d][l] != 0){
+                    highestLevel = l;
+                    value = domains[d][l];
+                }
+            }
+            if (value == 0){
+                continue;
+            }
+            for (int l = highestLevel-1; l >= 0; l--) {
+                if (domains[d][l] <= highestLevel){
+                    domains[d][l] = 0;
+                }
+            }
+        }
+    }
+
     @Override
     public int compareTo(Intervention i){
         return Comparator.comparing(Intervention::prio)
