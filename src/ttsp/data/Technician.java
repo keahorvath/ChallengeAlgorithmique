@@ -39,9 +39,8 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) im
 
     public boolean isAvailable(int day){
         for(int k : unavailability) {
-            if (k == day){
+            if (k == day)
                 return false;
-            }
         }
         return true;
     }
