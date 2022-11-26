@@ -102,7 +102,6 @@ public class Algorithm {
         return new TTSPSolution(interventionResultsCopy, teamsCopy, currentDay-1);
     }
 
-    //TODO: Compare by priority!! also compare by complexity/difficulty (nb of domains needed)
     public static ArrayList<Intervention> getAndSortInterventions(TTSPData data){
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
@@ -122,7 +121,6 @@ public class Algorithm {
             }
         }
         Collections.sort(availableTechnicians);
-
         return availableTechnicians;
     }
 
