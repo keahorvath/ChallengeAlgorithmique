@@ -5,7 +5,6 @@ import ttsp.data.TTSPData;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 
 public class TTSPSolution {
@@ -178,7 +177,7 @@ public class TTSPSolution {
         File intervFile = new File(path + "/interv_dates");
         StringBuilder string1 = new StringBuilder();
         for (InterventionResult i : interventionsResults){
-            string1.append(i.number() + " " + i.day() + " " + i.time() + " " + i.team() + "\n");
+            string1.append(i.number()).append(" ").append(i.day()).append(" ").append(i.time()).append(" ").append(i.team()).append("\n");
         }
         FileWriter writer1 = new FileWriter(intervFile);
         writer1.write(string1.toString());
@@ -192,7 +191,7 @@ public class TTSPSolution {
             for (Team g : teams){
                 string2.append(" [ ");
                 for (int t : g.technicians()){
-                    string2.append(t + " ");
+                    string2.append(t).append(" ");
                 }
                 string2.append("]");
             }

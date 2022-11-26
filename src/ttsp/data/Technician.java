@@ -56,7 +56,7 @@ public record Technician(int name, int[] domainsLevels, int[] unavailability) im
 
     @Override
     public int compareTo(Technician t){
-        return Comparator.comparing(Technician::sumOfLevels, Comparator.reverseOrder())
+        return Comparator.comparing(Technician::sumOfLevels)
                 .compare(this, t);
     }
 

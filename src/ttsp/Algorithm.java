@@ -9,9 +9,7 @@ import ttsp.solution.TTSPSolution;
 import ttsp.solution.Team;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +50,7 @@ public class Algorithm {
                     //It means that no more interventions can be done on the current day
                     break;
                 }
-                Team bestTeam = getBestTeam2(currentIntervention, availableTechnicians, currentDay, teamsOfCurrentDay.size()+1);
+                Team bestTeam = getBestTeam(currentIntervention, availableTechnicians, currentDay, teamsOfCurrentDay.size()+1);
                 if (bestTeam == null){
                     //It means that the current intervention can't be done with the remaining technicians
                     //Should never happen if code is correct
@@ -106,13 +104,6 @@ public class Algorithm {
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
         Collections.sort(interventionsToDo);
-        /*
-        System.out.println("Sorting:");
-        for (Intervention t : interventionsToDo){
-            System.out.println(t);
-        }
-
-         */
         return interventionsToDo;
     }
 
@@ -187,56 +178,14 @@ public class Algorithm {
     }
 
     /**
-     * TODO
      *Returns the team with the least amount of technicians and least amount of overqualified technicians
      */
     public static Team getBestTeam(Intervention intervention, ArrayList<Technician> technicians, int day, int teamNb){
         int[][] domains = intervention.getImprovedDomains();
         int[][] zeros = new int[domains.length][domains[0].length];
-        ArrayList<Technician> techniciansCopy = new ArrayList<>(technicians);
-        ArrayList<Technician> techniciansUsed = new ArrayList<>();
-
-        /*
-        Team perfectTeam = getPerfectTeam(intervention, technicians, day, teamNb);
-        if (perfectTeam != null){
-            System.out.println("found perfect team for intervention:" + intervention.number());
-            System.out.println(perfectTeam);
-            return perfectTeam;
+        for (int i = 0; i < domains.length; i++) {
+            Arrays.fill(zeros[i], 0);
         }
-
-         */
-
-        while (!Arrays.deepEquals(domains, zeros)){
-            if (techniciansCopy.size() == 0){
-                return null;
-            }
-            Technician t = techniciansCopy.get(0);
-            techniciansUsed.add(t);
-            techniciansCopy.remove(t);
-            boolean improvement = false;
-            for (int d = 1; d < domains.length+1; d++) {
-                for (int l = 1; l < domains[0].length+1; l++) {
-                    if (domains[d-1][l-1] != 0 && t.isQualified(d, l)){
-                        domains[d-1][l-1]--;
-                        improvement = true;
-                    }
-                }
-            }
-            if (!improvement){
-                techniciansUsed.remove(t);
-                techniciansCopy.add(t);
-            }
-        }
-        int[] techniciansUsedCopy = new int[techniciansUsed.size()];
-        for (int i = 0; i < techniciansUsed.size(); i++) {
-            techniciansUsedCopy[i] = techniciansUsed.get(i).name();
-        }
-        return new Team(day, teamNb, techniciansUsedCopy);
-    }
-
-    public static Team getBestTeam2(Intervention intervention, ArrayList<Technician> technicians, int day, int teamNb){
-        int[][] domains = intervention.getImprovedDomains();
-        int[][] zeros = new int[domains.length][domains[0].length];
         ArrayList<Technician> techniciansCopy = new ArrayList<>(technicians);
         ArrayList<Technician> techniciansUsed = new ArrayList<>();
 
@@ -297,48 +246,6 @@ public class Algorithm {
         }
         return new Team(day, teamNb, techniciansUsedCopy);
     }
-
-    public static Team getPerfectTeam(Intervention intervention, ArrayList<Technician> technicians, int day, int teamNb){
-        int[][] domains = intervention.getImprovedDomains();
-        int[][] zeros = new int[domains.length][domains[0].length];
-        ArrayList<Technician> techniciansCopy = new ArrayList<>(technicians);
-        ArrayList<Technician> techniciansUsed = new ArrayList<>();
-
-        while (!Arrays.deepEquals(domains, zeros)){
-            if (techniciansCopy.size() == 0){
-                return null;
-            }
-            Technician t = techniciansCopy.get(0);
-            techniciansUsed.add(t);
-            techniciansCopy.remove(t);
-            boolean bestTeam = true;
-            for (int d = 1; d < domains.length+1; d++) {
-                if (!bestTeam){
-                    break;
-                }
-                for (int l = domains[0].length; l >= 1; l--) {
-                    if (t.isQualified(d,l)){
-                        if (domains[d-1][l-1] == 0){
-                            bestTeam = false;
-                        }else{
-                            domains[d-1][l-1]--;
-                        }
-                        break;
-                    }
-                }
-            }
-            if (!bestTeam){
-                techniciansUsed.remove(t);
-                domains = intervention.getImprovedDomains();
-            }
-        }
-        int[] techniciansUsedCopy = new int[techniciansUsed.size()];
-        for (int i = 0; i < techniciansUsed.size(); i++) {
-            techniciansUsedCopy[i] = techniciansUsed.get(i).name();
-        }
-        return new Team(day, teamNb, techniciansUsedCopy);
-    }
-
 
     public static String usage(){
         return "usage: java -jar algorithm.jar absolutePathToFolder";

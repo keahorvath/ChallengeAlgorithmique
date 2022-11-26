@@ -10,19 +10,17 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
     public int[][] getDomains(){
         int[][] domainsCopy = new int[domains.length][domains[0].length];
         for (int i = 0; i < domains.length; i++) {
-            for (int j = 0; j < domains[0].length; j++) {
-                domainsCopy[i][j] = domains[i][j];
-            }
+            System.arraycopy(domains[i], 0, domainsCopy[i], 0, domains[0].length);
         }
         return domainsCopy;
     }
 
     public int minNbOfTechnicians(){
         int maxNbPerDomain = 0;
-        for (int d = 0; d < domains.length; d++) {
-            for (int l = 0; l < domains[d].length; l++) {
-                if (domains[d][l] > maxNbPerDomain){
-                    maxNbPerDomain = domains[d][l];
+        for (int[] domain : domains) {
+            for (int i : domain) {
+                if (i > maxNbPerDomain) {
+                    maxNbPerDomain = i;
                 }
             }
         }
@@ -31,9 +29,9 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
 
     public int totalLevelsNeeded(){
         int sum = 0;
-        for (int d = 0; d < domains.length; d++) {
-            for (int l = 0; l < domains[d].length; l++) {
-                sum += domains[d][l];
+        for (int[] domain : domains) {
+            for (int level : domain) {
+                sum += level;
             }
         }
         return sum;
@@ -44,11 +42,13 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
         }
         int[][] domains = new int[this.domains().length][this.domains()[0].length];
         for (int d = 0; d < domains.length; d++) {
-            for (int l = 0; l < domains[0].length; l++) {
-                domains[d][l] = this.domains()[d][l];
-            }
+            System.arraycopy(this.domains()[d], 0, domains[d], 0, domains[0].length);
         }
         int[][] zeros = new int[domains.length][domains[0].length];
+        for (int i = 0; i < domains.length; i++) {
+            Arrays.fill(zeros[i], 0);
+        }
+
         for (Technician t : technicians){
             for (int d = 1; d < domains.length+1; d++) {
                 for (int l = 1; l < domains[0].length+1; l++) {
@@ -109,8 +109,10 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
     public int compareTo(Intervention i){
         return Comparator.comparing(Intervention::prio)
                 .thenComparing(Intervention::duration, Comparator.reverseOrder())
-                .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
+                //.thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
                 .thenComparing(Intervention::totalLevelsNeeded, Comparator.reverseOrder())
+                .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
+                //.thenComparing(Intervention::duration, Comparator.reverseOrder())
                 .compare(this, i);
     }
 
