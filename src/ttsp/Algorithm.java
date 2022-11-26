@@ -106,10 +106,13 @@ public class Algorithm {
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
         Collections.sort(interventionsToDo);
+        /*
         System.out.println("Sorting:");
         for (Intervention t : interventionsToDo){
             System.out.println(t);
         }
+
+         */
         return interventionsToDo;
     }
 
