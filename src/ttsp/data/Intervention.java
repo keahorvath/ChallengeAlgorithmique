@@ -70,13 +70,14 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
                 if (domains[d][l] != 0){
                     highestLevel = l;
                     value = domains[d][l];
+                    break;
                 }
             }
             if (value == 0){
                 continue;
             }
             for (int l = highestLevel-1; l >= 0; l--) {
-                if (domainsImproved[d][l] <= highestLevel){
+                if (domainsImproved[d][l] <= value){
                     domainsImproved[d][l] = 0;
                 }
             }
@@ -92,13 +93,14 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
                 if (domains[d][l] != 0){
                     highestLevel = l;
                     value = domains[d][l];
+                    break;
                 }
             }
             if (value == 0){
                 continue;
             }
             for (int l = highestLevel-1; l >= 0; l--) {
-                if (domains[d][l] <= highestLevel){
+                if (domains[d][l] <= value){
                     domains[d][l] = 0;
                 }
             }
