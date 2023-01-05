@@ -7,37 +7,55 @@ import ttsp.solution.TTSPSolution;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Evaluator {
 
-    public static int evaluate(TTSPData data, TTSPSolution solution){
-        int c1 =0, c2=0, c3=0, c=0;
+    public static int getPriorityCost(int priority, TTSPData data, TTSPSolution solution){
+        int c = 0;
         for (Intervention i : data.interventions()){
             InterventionResult iResult = solution.getInterventionResult(i.number());
             if (iResult == null){
                 continue;
             }
             int endTime = iResult.getStartTime() + i.duration();
-
             int prio = i.prio();
+            if (prio == priority && c < endTime){
+                c = endTime;
+            }
+        }
+        return c;
+    }
+
+    public static int getCost(TTSPData data, TTSPSolution solution){
+        int c = 0;
+        for (Intervention i : data.interventions()){
+            InterventionResult iResult = solution.getInterventionResult(i.number());
+            if (iResult == null){
+                continue;
+            }
+            int endTime = iResult.getStartTime() + i.duration();
             if (c < endTime){
                 c = endTime;
             }
-            if (prio == 1 && c1 < endTime){
-                c1 = endTime;
-            }
-            else if (prio == 2 && c2 < endTime){
-                c2 = endTime;
-            }
-            else if (prio == 3 && c3 < endTime){
-                c3 = endTime;
-            }
         }
-        print(c1, c2, c3, c);
+        return c;
+    }
+
+    public static int evaluate(TTSPData data, TTSPSolution solution){
+        int c1 = getPriorityCost(1, data, solution);
+        int c2 = getPriorityCost(2, data, solution);
+        int c3 = getPriorityCost(3, data, solution);
+        int c = getCost(data, solution);
         return 28*c1 + 14*c2 + 4*c3 + c;
     }
 
-    public static void print(int c1, int c2, int c3, int c){
+    public static void print(TTSPData data, TTSPSolution solution){
+        int c1 = getPriorityCost(1, data, solution);
+        int c2 = getPriorityCost(2, data, solution);
+        int c3 = getPriorityCost(3, data, solution);
+        int c = getCost(data, solution);
         System.out.println("----------------------------------");
         System.out.println("--------- COMPUTE COST -----------");
         System.out.println("----------------------------------");
@@ -66,6 +84,7 @@ public class Evaluator {
         TTSPData data = InstanceReader.instanceReader(instanceFile, intervListFile, techListFile);
         TTSPSolution solution = SolutionReader.solutionReader(intervDatesFile, techTeamsFile);
         int value = evaluate(data, solution);
+        print(data, solution);
         System.out.println("-> TOTAL COST = " + value);
         System.out.println();
     }

@@ -9,9 +9,7 @@ import ttsp.solution.Team;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 import static ttsp.InstanceReader.instanceReader;
 
@@ -96,12 +94,14 @@ public class Algorithm {
         for (int i = 0; i < teamsCopy.length; i++) {
             teamsCopy[i] = teams.get(i);
         }
-        return new TTSPSolution(interventionResultsCopy, teamsCopy, currentDay-1);
+        return new TTSPSolution(interventionResultsCopy, teamsCopy, currentDay-1, data.nbInterventions());
     }
 
     public static ArrayList<Intervention> getAndSortInterventions(TTSPData data){
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
+        //Collections.sort(interventionsToDo);
+        Collections.shuffle(interventionsToDo);
         Collections.sort(interventionsToDo);
         return interventionsToDo;
     }
@@ -192,8 +192,8 @@ public class Algorithm {
             if (techniciansCopy.size() == 0) {
                 return null;
             }
-            ArrayList<Technician> usableTechnicians = new ArrayList<>();
-            ArrayList<Integer> nbUses = new ArrayList<>();
+
+            Map<Technician, Integer> usableTechnicians = new HashMap<>();
             for (int d = 1; d < domains.length+1; d++) {
                 for (int l = 1; l < domains[0].length+1; l++) {
                     if (domains[d-1][l-1] == 0){
@@ -201,25 +201,25 @@ public class Algorithm {
                     }
                     for (Technician t : techniciansCopy){
                         if (t.isQualified(d, l)){
-                            if (usableTechnicians.contains(t)){
-                                int prevValue = nbUses.get(usableTechnicians.indexOf(t));
-                                nbUses.set(usableTechnicians.indexOf(t), prevValue+1);
+                            if (usableTechnicians.containsKey(t)){
+                                usableTechnicians.put(t, usableTechnicians.get(t)+1);
                             }else{
-                                usableTechnicians.add(t);
-                                nbUses.add(1);
+                                usableTechnicians.put(t, 1);
                             }
                         }
                     }
                 }
             }
-            //Get all technicians that has the max amount of uses
+            //Get all technicians that have the max amount of uses
             ArrayList<Technician> bestTechnicians = new ArrayList<>();
-            int bestValue = Collections.max(nbUses);
-            for (int i = 0; i < usableTechnicians.size(); i++){
-                if (nbUses.get(i) == bestValue){
-                    bestTechnicians.add(usableTechnicians.get(i));
+            int bestValue = Collections.max(usableTechnicians.values());
+            for (Technician t : usableTechnicians.keySet()){
+                if (usableTechnicians.get(t) == bestValue){
+                    bestTechnicians.add(t);
                 }
             }
+
+            //Get technician that has the least unused levels
             Technician bestTechnician = bestTechnicians.get(0);
             for (Technician t : bestTechnicians){
                 if (t.amountUnusedLevels(domains) < bestTechnician.amountUnusedLevels(domains)){
@@ -267,6 +267,7 @@ public class Algorithm {
         boolean check = Checker.check(data, solution);
         if (check){
             System.out.println("Solution is feasible");
+            Evaluator.print(data, solution);
             System.out.println("-> TOTAL COST = " + Evaluator.evaluate(data, solution));
             solution.export(args[0]);
         }else{

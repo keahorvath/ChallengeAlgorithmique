@@ -36,6 +36,19 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
         }
         return sum;
     }
+
+    public int totalDomainsNeeded(){
+        int sum = 0;
+        for (int[] domain : domains) {
+            for (int i = 0; i < domain.length; i++) {
+                if (domain[i] != 0){
+                    sum += 1;
+                    break;
+                }
+            }
+        }
+        return sum;
+    }
     public boolean isDoable(ArrayList<Technician> technicians){
         if (technicians.size() < this.minNbOfTechnicians()){
             return false;
@@ -109,13 +122,50 @@ public record Intervention(int number, int duration, int[] preds, int prio, int 
 
     @Override
     public int compareTo(Intervention i){
+        //V1
+
         return Comparator.comparing(Intervention::prio)
+                .compare(this, i);
+
+        //V2
+        /*
+        return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::duration)
+                .compare(this, i);
+         */
+        //V3
+        /*
+        return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::duration)
+                .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
+                .compare(this, i);
+         */
+        //V4
+        /*
+         return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::minNbOfTechnicians)
+                .compare(this, i);
+         */
+        //V5
+        /*
+         return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
+                .compare(this, i);
+         */
+        //V6
+        /*
+         return Comparator.comparing(Intervention::prio)
+                .thenComparing(Intervention::totalLevelsNeeded, Comparator.reverseOrder())
+                .compare(this, i);
+         */
+        //V7
+        /*
+         return Comparator.comparing(Intervention::prio)
                 .thenComparing(Intervention::duration, Comparator.reverseOrder())
-                //.thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
                 .thenComparing(Intervention::totalLevelsNeeded, Comparator.reverseOrder())
                 .thenComparing(Intervention::minNbOfTechnicians, Comparator.reverseOrder())
-                //.thenComparing(Intervention::duration, Comparator.reverseOrder())
                 .compare(this, i);
+        */
     }
 
     @Override

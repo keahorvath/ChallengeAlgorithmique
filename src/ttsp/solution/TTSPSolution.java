@@ -12,11 +12,20 @@ public class TTSPSolution {
     private final InterventionResult[] interventionsResults;
     private final Team[] teams;
     private final int nbDays;
+    private final int nbInterventions;
+
+    public TTSPSolution(InterventionResult[] interventionsResults, Team[] teams, int nbDays, int nbInterventions){
+        this.interventionsResults = interventionsResults;
+        this.teams = teams;
+        this.nbDays = nbDays;
+        this.nbInterventions = nbInterventions;
+    }
 
     public TTSPSolution(InterventionResult[] interventionsResults, Team[] teams, int nbDays){
         this.interventionsResults = interventionsResults;
         this.teams = teams;
         this.nbDays = nbDays;
+        this.nbInterventions = interventionsResults.length;
     }
 
     public TTSPSolution(TTSPData data, int[][][] x, int[][][] y, int[] o, int[] b){
@@ -80,7 +89,7 @@ public class TTSPSolution {
         }
 
         this.interventionsResults = interventionsResultsCopy;
-
+        this.nbInterventions = data.nbInterventions();
     }
 
     public InterventionResult[] getInterventionsResults() {
@@ -173,6 +182,7 @@ public class TTSPSolution {
         return interventionsCompletedCopy;
     }
 
+
     public void export(String path) throws IOException {
         File intervFile = new File(path + "/interv_dates");
         StringBuilder string1 = new StringBuilder();
@@ -213,6 +223,13 @@ public class TTSPSolution {
         for (InterventionResult i : this.interventionsResults){
             s.append(i);
         }
+        s.append("\nOutsourced interventions: ");
+        for (int i = 1; i < this.nbInterventions+1; i++) {
+            if (getInterventionResult(i) == null){
+                s.append(i + " ");
+            }
+        }
+
         s.append("\n----------------------------------\n");
         s.append("------- TECHNICIAN TEAMS ---------\n");
         s.append("----------------------------------\n");
