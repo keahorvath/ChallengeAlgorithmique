@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class SolutionReader {
 
-    public static InterventionResult[] readInterventionsResults(File file) throws FileNotFoundException {
+    public static ArrayList<InterventionResult> readInterventionsResults(File file) throws FileNotFoundException {
         Scanner intervDatesReader = new Scanner(file);
         ArrayList<InterventionResult> interventionsResults = new ArrayList<>();
         while (intervDatesReader.hasNextLine()){
@@ -20,14 +20,10 @@ public class SolutionReader {
             InterventionResult interventionResult = new InterventionResult(Integer.parseInt(data[0]), Integer.parseInt(data[3]), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
             interventionsResults.add(interventionResult);
         }
-        InterventionResult[] interventionsResultsCopy = new InterventionResult[interventionsResults.size()];
-        for (int i = 0; i < interventionsResults.size(); i++){
-            interventionsResultsCopy[i] = interventionsResults.get(i);
-        }
-        return interventionsResultsCopy;
+        return interventionsResults;
     }
 
-    public static Team[] readTeamsSchedule(File file) throws FileNotFoundException {
+    public static ArrayList<Team> readTeamsSchedule(File file) throws FileNotFoundException {
         Scanner teamsReader = new Scanner(file);
         ArrayList<Team> teams = new ArrayList<>();
         while (teamsReader.hasNextLine()){
@@ -51,17 +47,13 @@ public class SolutionReader {
                 teams.add(new Team(day, currentTeam, techniciansCopy));
             }
         }
-        Team[] teamsCopy = new Team[teams.size()];
-        for (int i = 0; i < teamsCopy.length; i++) {
-            teamsCopy[i] = teams.get(i);
-        }
-        return teamsCopy;
+        return teams;
     }
 
     public static TTSPSolution solutionReader(File intervDatesFile, File techTeamsFile) throws FileNotFoundException {
-        InterventionResult[] interventionsResults = readInterventionsResults(intervDatesFile);
-        Team[] teams = readTeamsSchedule(techTeamsFile);
-        return new TTSPSolution(interventionsResults, teams, teams[teams.length-1].day());
+        ArrayList<InterventionResult> interventionsResults = readInterventionsResults(intervDatesFile);
+        ArrayList<Team> teams = readTeamsSchedule(techTeamsFile);
+        return new TTSPSolution(interventionsResults, teams, teams.get(teams.size()-1).day());
     }
 
     public static String usage(){

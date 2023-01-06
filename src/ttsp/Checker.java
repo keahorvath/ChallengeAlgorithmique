@@ -10,6 +10,7 @@ import ttsp.solution.Team;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class Checker {
@@ -107,16 +108,16 @@ public class Checker {
                     noIssue = false;
                 }
             }
-            for (int teamNb = 1; teamNb < solution.getTeamsOfDay(day).length; teamNb++){
-                InterventionResult[] interventionsCompleted = solution.getInterventionsCompletedOnDayByTeam(day, teamNb);
-                Arrays.sort(interventionsCompleted, Comparator.comparing(InterventionResult::time));
-                for (int i = 1; i < interventionsCompleted.length; i++){
-                    int prevStartTime = interventionsCompleted[i-1].time();
-                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted[i-1].number()).duration() + interventionsCompleted[i-1].time();
-                    int currentStartTime =  interventionsCompleted[i].time();
-                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted[i].number()).duration() + interventionsCompleted[i].time();
+            for (int teamNb = 1; teamNb < solution.getTeamsOfDay(day).size(); teamNb++){
+                ArrayList<InterventionResult> interventionsCompleted = solution.getInterventionsCompletedOnDayByTeam(day, teamNb);
+                Collections.sort(interventionsCompleted, Comparator.comparing(InterventionResult::time));
+                for (int i = 1; i < interventionsCompleted.size(); i++){
+                    int prevStartTime = interventionsCompleted.get(i-1).time();
+                    int prevEndTime = data.getInterventionFromNumber(interventionsCompleted.get(i-1).number()).duration() + interventionsCompleted.get(i-1).time();
+                    int currentStartTime =  interventionsCompleted.get(i).time();
+                    int currentEndTime = data.getInterventionFromNumber(interventionsCompleted.get(i).number()).duration() + interventionsCompleted.get(i).time();
                     if (prevEndTime > currentStartTime){
-                        System.out.println("[issue] Interventions #" + interventionsCompleted[i-1].number() + " and #" + interventionsCompleted[i].number() + " overlap on day " + day + " and are executed by the same team #" + teamNb + " ([" + prevStartTime + "," + prevEndTime + "] and [" + currentStartTime + "," + currentEndTime + "])");
+                        System.out.println("[issue] Interventions #" + interventionsCompleted.get(i-1).number() + " and #" + interventionsCompleted.get(i).number() + " overlap on day " + day + " and are executed by the same team #" + teamNb + " ([" + prevStartTime + "," + prevEndTime + "] and [" + currentStartTime + "," + currentEndTime + "])");
                         noIssue = false;
                     }
                 }

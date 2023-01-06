@@ -86,17 +86,16 @@ public class Algorithm {
 
 
         }
-        InterventionResult[] interventionResultsCopy = new InterventionResult[interventionResults.size()];
-        for (int i = 0; i < interventionResultsCopy.length; i++) {
-            interventionResultsCopy[i] = interventionResults.get(i);
-        }
-        Team[] teamsCopy = new Team[teams.size()];
-        for (int i = 0; i < teamsCopy.length; i++) {
-            teamsCopy[i] = teams.get(i);
-        }
-        return new TTSPSolution(interventionResultsCopy, teamsCopy, currentDay-1, data.nbInterventions());
+        return new TTSPSolution(interventionResults, teams, currentDay-1, data.nbInterventions());
     }
 
+    public static TTSPSolution improveSolution(TTSPSolution solution){
+        for (int i = 1; i < solution.getNbDays()+1; i++) {
+            //solution.ge
+
+        }
+        return null;
+    }
     public static ArrayList<Intervention> getAndSortInterventions(TTSPData data){
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
