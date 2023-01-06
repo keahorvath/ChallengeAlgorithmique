@@ -18,7 +18,6 @@ public class Algorithm {
     public static TTSPSolution algorithm(TTSPData data){
 
         ArrayList<Intervention> interventionsToDo = getAndSortInterventions(data);
-        ArrayList<Integer> outsourcedInterventions = new ArrayList<>();
         ArrayList<InterventionResult> interventionResults = new ArrayList<>();
         ArrayList<Team> teams = new ArrayList<>();
 
@@ -28,9 +27,6 @@ public class Algorithm {
         while (interventionsToDo.size() != 0){
             //If the remaining interventions can all be outsourced, outsource them
             if (costOfInterventions(interventionsToDo) <= remainingBudget){
-                for (Intervention i : interventionsToDo){
-                    outsourcedInterventions.add(i.number());
-                }
                 interventionsToDo.clear();
                 continue;
             }
@@ -89,17 +85,10 @@ public class Algorithm {
         return new TTSPSolution(interventionResults, teams, currentDay-1, data.nbInterventions());
     }
 
-    public static TTSPSolution improveSolution(TTSPSolution solution){
-        for (int i = 1; i < solution.getNbDays()+1; i++) {
-            //solution.ge
-
-        }
-        return null;
-    }
     public static ArrayList<Intervention> getAndSortInterventions(TTSPData data){
         ArrayList<Intervention> interventionsToDo = new ArrayList<>();
         Collections.addAll(interventionsToDo, data.interventions());
-        //Collections.sort(interventionsToDo);
+        Collections.sort(interventionsToDo);
         Collections.shuffle(interventionsToDo);
         Collections.sort(interventionsToDo);
         return interventionsToDo;
@@ -159,7 +148,7 @@ public class Algorithm {
                 }
                 //Get the result for intervention j:
                 for (InterventionResult k : results){
-                    if (k.number() == j && k.getEndTime(data) > currentTime){
+                    if (k.number() == j && k.getTotalEndTime(data) > currentTime){
                         arePredsDone = false;
                         break;
                     }

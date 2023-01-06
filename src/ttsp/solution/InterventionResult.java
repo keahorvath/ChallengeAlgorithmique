@@ -9,7 +9,7 @@ public record InterventionResult(int number, int team, int day, int time) {
         return (day - 1) * 120 + time;
     }
 
-    public int getEndTime(TTSPData data){
+    public int getTotalEndTime(TTSPData data){
         for (Intervention i : data.interventions()){
             if (i.number() == number){
                 return getStartTime() + i.duration();

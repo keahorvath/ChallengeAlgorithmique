@@ -2,7 +2,6 @@ package ttsp;
 
 import gurobi.GRBException;
 import ttsp.data.TTSPData;
-import ttsp.solution.InterventionResult;
 import ttsp.solution.TTSPSolution;
 
 import java.io.File;
@@ -14,14 +13,15 @@ import static ttsp.InstanceReader.instanceReader;
 //Comment line 103 in Algorithm.java before using
 public class RandomSort {
     public static String usage(){
-        return "usage: java -jar randomSort.jar absolutePathToFolder";
+        return "usage: java -jar randomSort.jar absolutePathToFolder nbIterations";
     }
 
     public static void main(String[] args) throws IOException, GRBException {
-        if (args.length != 1){
+        if (args.length != 2){
+            System.out.println(usage());
             System.exit(1);
         }
-        int nbInstances = 1000;
+        int nbInstances = Integer.parseInt(args[1]);
         for (int i = 1; i <= 10; i++) {
             String path = args[0] + "/data" + i;
             File instanceFile = new File(path + "/instance");

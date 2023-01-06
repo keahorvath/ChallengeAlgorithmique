@@ -1,5 +1,5 @@
-*.pdf
 out/
 .idea/
 rendus/
 ChallengeAlgorithmique.iml
+*.html

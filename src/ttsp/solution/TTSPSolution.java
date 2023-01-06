@@ -127,6 +127,7 @@ public class TTSPSolution {
         return null;
     }
 
+
     public ArrayList<Integer> getTeamsOfTechnician(int name, int day){
         ArrayList<Team> teams = getTeamsOfDay(day);
         ArrayList<Integer> teamsAssigned= new ArrayList<>();
@@ -158,7 +159,6 @@ public class TTSPSolution {
         }
         return interventionsCompleted;
     }
-
 
     public void export(String path) throws IOException {
         File intervFile = new File(path + "/interv_dates");
@@ -203,7 +203,7 @@ public class TTSPSolution {
         s.append("\nOutsourced interventions: ");
         for (int i = 1; i < this.nbInterventions+1; i++) {
             if (getInterventionResult(i) == null){
-                s.append(i + " ");
+                s.append(i).append(" ");
             }
         }
 
